@@ -1,3 +1,4 @@
+/* biome-ignore-file: Tailwind v4 @theme tokens unsupported by current Biome */
 @import "tailwindcss" source(".");
 
 @theme {

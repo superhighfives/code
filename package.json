@@ -1,21 +1,6 @@
 {
   "name": "code",
-  "description": "Build a full-stack web application with React Router 7.",
   "private": true,
-  "cloudflare": {
-    "label": "React Router Framework Starter",
-    "products": [
-      "Workers"
-    ],
-    "categories": [
-      "storage"
-    ],
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ],
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/bfdc2f85-e5c9-4c92-128b-3a6711249800/public",
-    "publish": true
-  },
   "dependencies": {
     "isbot": "5.1.26",
     "react": "^19.0.0",
@@ -23,7 +8,9 @@
     "react-router": "7.6.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
     "@cloudflare/vite-plugin": "1.7.5",
+    "@cloudflare/workers-types": "^4.20250926.0",
     "@react-router/dev": "7.6.3",
     "@tailwindcss/vite": "4.1.4",
     "@types/node": "24.0.4",
@@ -37,12 +24,14 @@
   },
   "scripts": {
     "build": "react-router build",
-    "cf-typegen": "wrangler types && react-router typegen",
+    "typegen": "wrangler types && react-router typegen",
     "check": "tsc && react-router build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "react-router dev",
     "preview": "npm run build && vite preview",
-    "typecheck": "npm run typegen && tsc -b"
+    "typecheck": "npm run typegen && tsc -b",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write"
   },
   "type": "module"
 }
