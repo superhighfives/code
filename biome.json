@@ -11,7 +11,7 @@
       "**",
       "!worker-configuration.d.ts",
       "!.react-router",
-      "!app/app.css"
+      "!app/global.css"
     ]
   },
   "formatter": {
@@ -36,13 +36,5 @@
         "organizeImports": "on"
       }
     }
-  },
-  "overrides": [
-    {
-      "includes": ["app/app.css"],
-      "linter": {
-        "enabled": false
-      }
-    }
-  ]
+  }
 }
