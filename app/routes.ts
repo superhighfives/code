@@ -6,7 +6,15 @@ import {
 import { routes } from "react-router-mdx/server";
 
 export default [
-  index("routes/index.tsx"),
-  route("about", "routes/about.tsx"),
-  ...routes("./routes/post.tsx")
+  {
+    id: "root",
+    path: "",
+    file: "root.tsx",
+    children: [
+      index("routes/index.tsx"),
+      route("about", "routes/about.tsx"),
+      route("resources/theme-switch", "routes/resources/theme-switch.tsx"),
+      ...routes("./routes/post.tsx"),
+    ],
+  },
 ] satisfies RouteConfig;
