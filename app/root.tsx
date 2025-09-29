@@ -55,7 +55,7 @@ function Document({
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-mono text-sm bg-white dark:bg-gray-950">
         {children}
         <ScrollRestoration />
         <Scripts />

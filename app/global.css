@@ -16,7 +16,7 @@
     }
   }
 
-  --animation-blink: blink 1s steps(1, end) infinite;
+  --animate-blink: blink 1s steps(1, end) infinite;
   --grid-template-rows-layout: "1fr auto";
 }
 

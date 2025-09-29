@@ -1,6 +1,6 @@
 import { NavLink as Link, useRouteLoaderData } from "react-router";
 import type { loader as rootLoader } from "~/root";
-import { ThemeSwitch, useTheme } from "~/routes/resources/theme-switch";
+import { ThemeSwitch } from "~/routes/resources/theme-switch";
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   let className =
