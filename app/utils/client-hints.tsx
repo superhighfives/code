@@ -19,7 +19,6 @@ export const { getHints } = hintsUtils;
  * @returns an object with the client hints and their values
  */
 export function useHints() {
-  console.log("calling request info from client-hints");
   const requestInfo = useRequestInfo();
   return requestInfo.hints;
 }
@@ -32,7 +31,7 @@ export function useHints() {
 export function ClientHintCheck() {
   const { revalidate } = useRevalidator();
   useEffect(() => {
-    subscribeToSchemeChange(() => revalidate(), "theme");
+    subscribeToSchemeChange(() => revalidate());
   }, [revalidate]);
 
   return (
