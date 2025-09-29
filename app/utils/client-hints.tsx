@@ -3,7 +3,12 @@
  * are needed by the server, but are only known by the browser.
  */
 import { getHintUtils } from "@epic-web/client-hints";
-import { clientHint as colourSchemeHint } from "@epic-web/client-hints/color-scheme";
+import {
+  clientHint as colourSchemeHint,
+  subscribeToSchemeChange,
+} from "@epic-web/client-hints/color-scheme";
+import { useEffect } from "react";
+import { useRevalidator } from "react-router";
 import { useRequestInfo } from "./request-info";
 
 const hintsUtils = getHintUtils({ theme: colourSchemeHint });
@@ -25,6 +30,11 @@ export function useHints() {
  * inaccurate value.
  */
 export function ClientHintCheck() {
+  const { revalidate } = useRevalidator();
+  useEffect(() => {
+    subscribeToSchemeChange(() => revalidate(), "theme");
+  }, [revalidate]);
+
   return (
     <script
       // biome-ignore lint/security/noDangerouslySetInnerHtml: required for client hints

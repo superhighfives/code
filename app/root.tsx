@@ -31,6 +31,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return {
     requestInfo: {
       hints: getHints(request),
+      path: new URL(request.url).pathname,
       userPrefs: {
         theme: getTheme(request),
       },
