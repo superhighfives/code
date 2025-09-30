@@ -1,10 +1,8 @@
 import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
-import RESVG_WASM from "node_modules/@resvg/resvg-wasm/index_bg.wasm?url";
-import YOGA_WASM from "node_modules/yoga-wasm-web/dist/yoga.wasm?url";
 import type { SatoriOptions } from "satori";
-import satori, { init as initSatori } from "satori/wasm";
-import { loadGoogleFont } from "workers-og";
-import initYoga from "yoga-wasm-web";
+import satori, { init as initSatori } from "satori/standalone";
+import RESVG_WASM from "~/vendor/resvg.wasm?url";
+import YOGA_WASM from "~/vendor/yoga.wasm?url";
 import type { Route } from "./+types/og-image";
 
 export const OG_IMAGE_WIDTH = 1200;
@@ -36,8 +34,24 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   try {
     if (!initialised) {
+      // Load WASM files directly using fetch and the URL imports
+      console.log("Loading WASM files");
+      // const resvgArrayBuffer = await fetch(RESVG_WASM).then((r) =>
+      //   r.arrayBuffer(),
+      // );
+      // const yogaArrayBuffer = await fetch(YOGA_WASM).then((r) =>
+      //   r.arrayBuffer(),
+      // );
+
+      // const resvgwasm = new WebAssembly.Module(resvgArrayBuffer);
+      // const yogawasm = new WebAssembly.Module(yogaArrayBuffer);
+
+      console.log(RESVG_WASM);
+      console.log("0 files loaded");
       await initResvg(RESVG_WASM);
-      initSatori(await initYoga(YOGA_WASM));
+      console.log("1 files loaded");
+      await initSatori(YOGA_WASM);
+      console.log("WASM files loaded");
       initialised = true;
     }
   } catch (_e) {
@@ -70,11 +84,11 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       width: OG_IMAGE_WIDTH,
       height: OG_IMAGE_HEIGHT,
       fonts: [
-        {
-          name: "JetBrainsMono-Semibold",
-          data: await loadGoogleFont({ family: "JetBrains Mono", weight: 600 }),
-          style: "normal",
-        },
+        // {
+        //   name: "JetBrainsMono-Semibold",
+        //   data: await loadGoogleFont({ family: "JetBrains Mono", weight: 600 }),
+        //   style: "normal",
+        // },
       ],
     };
 
