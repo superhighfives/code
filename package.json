@@ -19,6 +19,7 @@
     "react-router": "7.6.3",
     "react-router-mdx": "^1.0.7",
     "remix-utils": "^9.0.0",
+    "workers-og": "^0.0.27",
     "zod": "^4.1.11"
   },
   "devDependencies": {
