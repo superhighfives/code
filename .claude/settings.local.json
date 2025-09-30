@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:charliegleason.com)",
       "Bash(npm install:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

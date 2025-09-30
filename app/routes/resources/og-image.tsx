@@ -1,4 +1,10 @@
-import { ImageResponse, loadGoogleFont } from "workers-og";
+import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
+import RESVG_WASM from "node_modules/@resvg/resvg-wasm/index_bg.wasm?url";
+import YOGA_WASM from "node_modules/yoga-wasm-web/dist/yoga.wasm?url";
+import type { SatoriOptions } from "satori";
+import satori, { init as initSatori } from "satori/wasm";
+import { loadGoogleFont } from "workers-og";
+import initYoga from "yoga-wasm-web";
 import type { Route } from "./+types/og-image";
 
 export const OG_IMAGE_WIDTH = 1200;
@@ -21,16 +27,29 @@ export type PostMeta = {
   frontmatter: Frontmatter;
 };
 
-export async function loader({ request, params }: Route.LoaderArgs) {
-  try {
-    const { origin, searchParams } = new URL(request.url);
-    const slug = searchParams.get("slug");
+let initialised = false;
 
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const { origin, searchParams } = new URL(request.url);
+  console.log(origin, params);
+  const slug = searchParams.get("slug");
+
+  try {
+    if (!initialised) {
+      await initResvg(RESVG_WASM);
+      initSatori(await initYoga(YOGA_WASM));
+      initialised = true;
+    }
+  } catch (_e) {
+    initialised = true;
+  }
+
+  try {
     // if (!slug) {
     //   throw new Error("No slug provided");
     // }
 
-    // const url = new URL(requestUrl);
+    // const url = new URL(origin);
     // url.pathname = `/${slug}.json`;
     // const data: PostMeta = await fetch(url).then(
     //   async (res) => await res.json(),
@@ -42,29 +61,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
     // const { title, description } = data.frontmatter;
 
-    // const { default: resvgwasm } = await import(
-    //   /* @vite-ignore */ `${RESVG_WASM}?module`
-    // );
-    // const { default: yogawasm } = await import(
-    //   /* @vite-ignore */ `${YOGA_WASM}?module`
-    // );
-
-    // try {
-    //   if (!initialised) {
-    //     await initResvg(resvgwasm);
-    //     await initSatori(await initYoga(yogawasm));
-    //     initialised = true;
-    //   }
-    // } catch (_e) {
-    //   initialised = true;
-    // }
-
     const { title, description } = {
       title: "Hello",
       description: "World",
     };
 
-    const options = {
+    const options: SatoriOptions = {
       width: OG_IMAGE_WIDTH,
       height: OG_IMAGE_HEIGHT,
       fonts: [
@@ -76,8 +78,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       ],
     };
 
-    // Design the image and generate an SVG with "satori"
-    return new ImageResponse(
+    const svg = await satori(
       <div
         style={{
           width: options.width,
@@ -116,10 +117,29 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       </div>,
       options,
     );
+
+    // Convert the SVG to PNG with "resvg"
+    const resvg = new Resvg(svg);
+    const pngData = resvg.render();
+    return new Response(pngData.asPng() as BodyInit, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "cache-control": "public, immutable, no-transform, max-age=31536000",
+      },
+    });
   } catch (e) {
     console.log(e);
+    console.log(origin);
     const url = new URL(origin);
     url.pathname = "/social-default.png";
-    return await fetch(url).then((res) => res.body);
+    const png = await fetch(url).then((res) => res.body);
+    return new Response(png, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "cache-control": "public, immutable, no-transform, max-age=31536000",
+      },
+    });
   }
 }
