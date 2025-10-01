@@ -1,8 +1,12 @@
-// import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
+import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
 import type { SatoriOptions } from "satori";
-import satori, { init as initSatori } from "satori/standalone";
-// import resvgWasm from "~/vendor/resvg.wasm?url";
-import yogaWasm from "~/vendor/yoga.wasm?url";
+import satori, { init as initSatori } from "satori/wasm";
+import { loadGoogleFont } from "workers-og";
+import initYoga from "yoga-wasm-web";
+// @ts-expect-error: wasm is untyped in Vite
+import RESVG_WASM from "../../vendor/resvg.wasm";
+// @ts-expect-error: wasm is untyped in Vite
+import YOGA_WASM from "../../vendor/yoga.wasm";
 import type { Route } from "./+types/og-image";
 
 export const OG_IMAGE_WIDTH = 1200;
@@ -25,42 +29,23 @@ export type PostMeta = {
   frontmatter: Frontmatter;
 };
 
-// Initialize WASM modules at global scope
-let satoriInitialized = false;
-// let resvgInitialized = false;
-
-// Initialize satori with yoga WASM at global scope
-async function initializeSatori() {
-  if (!satoriInitialized) {
-    try {
-      await initSatori(yogaWasm);
-      satoriInitialized = true;
-    } catch (e) {
-      console.error("Failed to initialize satori:", e);
-      throw e;
-    }
-  }
-}
-
-// Initialize resvg WASM at global scope
-// async function initializeResvg() {
-//   if (!resvgInitialized) {
-//     try {
-//       await initResvg(resvgWasm);
-//       resvgInitialized = true;
-//     } catch (e) {
-//       console.error("Failed to initialize resvg:", e);
-//       throw e;
-//     }
-//   }
-// }
+let initialised = false;
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { origin, searchParams } = new URL(request.url);
+  console.log(origin, params);
   const slug = searchParams.get("slug");
 
-  // Initialize WASM modules
-  await Promise.all([initializeSatori()]);
+  try {
+    if (!initialised) {
+      await initResvg(RESVG_WASM);
+      initSatori(await initYoga(YOGA_WASM));
+      initialised = true;
+    }
+  } catch (_e) {
+    console.log(_e);
+    initialised = true;
+  }
 
   try {
     // if (!slug) {
@@ -88,15 +73,13 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       width: OG_IMAGE_WIDTH,
       height: OG_IMAGE_HEIGHT,
       fonts: [
-        // {
-        //   name: "JetBrainsMono-Semibold",
-        //   data: await loadGoogleFont({ family: "JetBrains Mono", weight: 600 }),
-        //   style: "normal",
-        // },
+        {
+          name: "JetBrainsMono-Semibold",
+          data: await loadGoogleFont({ family: "JetBrains Mono", weight: 600 }),
+          style: "normal",
+        },
       ],
     };
-
-    console.log("satori");
 
     const svg = await satori(
       <div
@@ -138,26 +121,19 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       options,
     );
 
-    console.log("satori complete");
-
-    return new Response(svg, {
+    // Convert the SVG to PNG with "resvg"
+    const resvg = new Resvg(svg);
+    const pngData = resvg.render();
+    return new Response(pngData.asPng() as BodyInit, {
       status: 200,
       headers: {
-        "Content-Type": "image/svg+xml",
+        "Content-Type": "image/png",
+        "cache-control": "public, immutable, no-transform, max-age=31536000",
       },
     });
-
-    // Convert the SVG to PNG with "resvg"
-    // const resvg = new Resvg(svg);
-    // const pngData = resvg.render();
-    // return new Response(pngData.asPng() as BodyInit, {
-    //   status: 200,
-    //   headers: {
-    //     "Content-Type": "image/png",
-    //     "cache-control": "public, immutable, no-transform, max-age=31536000",
-    //   },
-    // });
   } catch (e) {
+    console.log(e);
+    console.log(origin);
     const url = new URL(origin);
     url.pathname = "/social-default.png";
     const png = await fetch(url).then((res) => res.body);

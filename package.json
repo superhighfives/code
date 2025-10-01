@@ -20,7 +20,9 @@
     "react-router": "7.6.3",
     "react-router-mdx": "^1.0.7",
     "remix-utils": "^9.0.0",
-    "satori": "^0.18.3",
+    "satori": "^0.10.13",
+    "vite-plugin-wasm-module-workers": "^0.0.2",
+    "workers-og": "^0.0.27",
     "zod": "^4.1.11"
   },
   "devDependencies": {
@@ -36,13 +38,13 @@
     "typescript": "5.8.3",
     "vite": "^6.0.0",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.40.3"
+    "wrangler": "4.21.x"
   },
   "scripts": {
     "build": "react-router build",
     "typegen": "wrangler types && react-router typegen",
     "check": "tsc && react-router build && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
+    "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
     "preview": "npm run build && vite preview",
     "typecheck": "npm run typegen && tsc -b",
