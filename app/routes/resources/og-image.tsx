@@ -1,9 +1,9 @@
+import { Buffer } from "node:buffer";
 import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
 import type { SatoriOptions } from "satori";
 import satori, { init as initSatori } from "satori/wasm";
 import { loadGoogleFont } from "workers-og";
 import initYoga from "yoga-wasm-web";
-import { socialBackground } from "~/utils/images";
 // @ts-expect-error: wasm is untyped in Vite
 import RESVG_WASM from "../../vendor/resvg.wasm";
 // @ts-expect-error: wasm is untyped in Vite
@@ -37,6 +37,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   console.log(origin, params);
   const slug = searchParams.get("slug");
+
+  console.log(`${origin}/social-default.png`);
+  const imageResponse = await fetch(`${origin}/social-default.png`);
+  const imageBuffer = await imageResponse.arrayBuffer();
+  const imageBase64 = `data:image/png;base64,${Buffer.from(imageBuffer).toString("base64")}`;
+  console.log(`url("${imageBase64}")`);
 
   try {
     if (!initialised) {
@@ -88,7 +94,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         style={{
           width: options.width,
           height: options.height,
-          background: `url(${socialBackground})`,
+          background: `url("${imageBase64}")`,
           backgroundSize: "1200 630",
           padding: "100px",
           color: "white",
@@ -134,16 +140,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       },
     });
   } catch (_e) {
-    // Decode base64-encoded string and return as PNG response
-    return new Response(
-      Uint8Array.from(atob(socialBackground), (c) => c.charCodeAt(0)),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "image/png",
-          "cache-control": "public, immutable, no-transform, max-age=31536000",
-        },
+    return new Response(imageBuffer, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "cache-control": "public, immutable, no-transform, max-age=31536000",
       },
-    );
+    });
   }
 }
