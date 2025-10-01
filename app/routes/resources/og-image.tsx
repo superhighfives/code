@@ -1,9 +1,11 @@
+import { env } from "cloudflare:workers";
 import { Buffer } from "node:buffer";
 import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
 import type { SatoriOptions } from "satori";
 import satori, { init as initSatori } from "satori/wasm";
 import { loadGoogleFont } from "workers-og";
 import initYoga from "yoga-wasm-web";
+import background from "~/assets/social-background.png";
 // @ts-expect-error: wasm is untyped in Vite
 import RESVG_WASM from "../../vendor/resvg.wasm";
 // @ts-expect-error: wasm is untyped in Vite
@@ -33,16 +35,13 @@ export type PostMeta = {
 let initialised = false;
 
 export async function loader({ request, params }: Route.LoaderArgs) {
-  const { origin, searchParams } = new URL(request.url);
+  const { slug } = params;
 
-  console.log(origin, params);
-  const slug = searchParams.get("slug");
-
-  console.log(`${origin}/social-default.png`);
-  const imageResponse = await fetch(`${origin}/social-default.png`);
+  const imageResponse = await env.ASSETS.fetch(
+    new URL(background, request.url),
+  );
   const imageBuffer = await imageResponse.arrayBuffer();
   const imageBase64 = `data:image/png;base64,${Buffer.from(imageBuffer).toString("base64")}`;
-  console.log(`url("${imageBase64}")`);
 
   try {
     if (!initialised) {
@@ -50,15 +49,10 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       initSatori(await initYoga(YOGA_WASM));
       initialised = true;
     }
-  } catch (_e) {
-    console.log(_e);
-    initialised = true;
-  }
 
-  try {
-    // if (!slug) {
-    //   throw new Error("No slug provided");
-    // }
+    if (!slug) {
+      throw new Error("No slug provided");
+    }
 
     // const url = new URL(origin);
     // url.pathname = `/${slug}.json`;
@@ -73,7 +67,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     // const { title, description } = data.frontmatter;
 
     const { title, description } = {
-      title: "Hello",
+      title: slug,
       description: "World",
     };
 
@@ -140,6 +134,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       },
     });
   } catch (_e) {
+    initialised = true;
     return new Response(imageBuffer, {
       status: 200,
       headers: {
