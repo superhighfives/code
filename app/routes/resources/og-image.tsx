@@ -1,8 +1,8 @@
-import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
+// import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
 import type { SatoriOptions } from "satori";
 import satori, { init as initSatori } from "satori/standalone";
-import RESVG_WASM from "~/vendor/resvg.wasm?url";
-import YOGA_WASM from "~/vendor/yoga.wasm?url";
+// import resvgWasm from "~/vendor/resvg.wasm?url";
+import yogaWasm from "~/vendor/yoga.wasm?url";
 import type { Route } from "./+types/og-image";
 
 export const OG_IMAGE_WIDTH = 1200;
@@ -25,38 +25,42 @@ export type PostMeta = {
   frontmatter: Frontmatter;
 };
 
-let initialised = false;
+// Initialize WASM modules at global scope
+let satoriInitialized = false;
+// let resvgInitialized = false;
+
+// Initialize satori with yoga WASM at global scope
+async function initializeSatori() {
+  if (!satoriInitialized) {
+    try {
+      await initSatori(yogaWasm);
+      satoriInitialized = true;
+    } catch (e) {
+      console.error("Failed to initialize satori:", e);
+      throw e;
+    }
+  }
+}
+
+// Initialize resvg WASM at global scope
+// async function initializeResvg() {
+//   if (!resvgInitialized) {
+//     try {
+//       await initResvg(resvgWasm);
+//       resvgInitialized = true;
+//     } catch (e) {
+//       console.error("Failed to initialize resvg:", e);
+//       throw e;
+//     }
+//   }
+// }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { origin, searchParams } = new URL(request.url);
-  console.log(origin, params);
   const slug = searchParams.get("slug");
 
-  try {
-    if (!initialised) {
-      // Load WASM files directly using fetch and the URL imports
-      console.log("Loading WASM files");
-      // const resvgArrayBuffer = await fetch(RESVG_WASM).then((r) =>
-      //   r.arrayBuffer(),
-      // );
-      // const yogaArrayBuffer = await fetch(YOGA_WASM).then((r) =>
-      //   r.arrayBuffer(),
-      // );
-
-      // const resvgwasm = new WebAssembly.Module(resvgArrayBuffer);
-      // const yogawasm = new WebAssembly.Module(yogaArrayBuffer);
-
-      console.log(RESVG_WASM);
-      console.log("0 files loaded");
-      await initResvg(RESVG_WASM);
-      console.log("1 files loaded");
-      await initSatori(YOGA_WASM);
-      console.log("WASM files loaded");
-      initialised = true;
-    }
-  } catch (_e) {
-    initialised = true;
-  }
+  // Initialize WASM modules
+  await Promise.all([initializeSatori()]);
 
   try {
     // if (!slug) {
@@ -91,6 +95,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         // },
       ],
     };
+
+    console.log("satori");
 
     const svg = await satori(
       <div
@@ -132,19 +138,26 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       options,
     );
 
-    // Convert the SVG to PNG with "resvg"
-    const resvg = new Resvg(svg);
-    const pngData = resvg.render();
-    return new Response(pngData.asPng() as BodyInit, {
+    console.log("satori complete");
+
+    return new Response(svg, {
       status: 200,
       headers: {
-        "Content-Type": "image/png",
-        "cache-control": "public, immutable, no-transform, max-age=31536000",
+        "Content-Type": "image/svg+xml",
       },
     });
+
+    // Convert the SVG to PNG with "resvg"
+    // const resvg = new Resvg(svg);
+    // const pngData = resvg.render();
+    // return new Response(pngData.asPng() as BodyInit, {
+    //   status: 200,
+    //   headers: {
+    //     "Content-Type": "image/png",
+    //     "cache-control": "public, immutable, no-transform, max-age=31536000",
+    //   },
+    // });
   } catch (e) {
-    console.log(e);
-    console.log(origin);
     const url = new URL(origin);
     url.pathname = "/social-default.png";
     const png = await fetch(url).then((res) => res.body);

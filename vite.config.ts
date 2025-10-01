@@ -7,8 +7,8 @@ import wasm from "./lib/wasm-plugin";
 
 export default defineConfig({
   plugins: [
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     wasm(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),

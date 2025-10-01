@@ -4,7 +4,8 @@
       "WebFetch(domain:charliegleason.com)",
       "Bash(npm install:*)",
       "Bash(npx tsc:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:developers.cloudflare.com)"
     ],
     "deny": [],
     "ask": []
