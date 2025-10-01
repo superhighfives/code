@@ -38,17 +38,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   url.pathname = "/social-default.png";
   const background = await fetch(url).then((res) => res.body);
 
-  function base64Encode(buf: ArrayBuffer) {
-    let string = "";
-    new Uint8Array(buf).forEach((byte) => {
-      string += String.fromCharCode(byte);
-    });
-    return btoa(string);
-  }
-
-  const upstreamResponse = await fetch(url);
-  const backgroundBase64 = base64Encode(await upstreamResponse.arrayBuffer());
-
   console.log(origin, params);
   const slug = searchParams.get("slug");
 
@@ -102,7 +91,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         style={{
           width: options.width,
           height: options.height,
-          background: `url(data:image/png;base64,${backgroundBase64})`,
+          background: `url(${url})`,
           backgroundSize: "1200 630",
           padding: "100px",
           color: "white",
