@@ -91,7 +91,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         style={{
           width: options.width,
           height: options.height,
-          background: `url(${url})`,
+          background: `url(${origin}/social-default.png)`,
           backgroundSize: "1200 630",
           padding: "100px",
           color: "white",
