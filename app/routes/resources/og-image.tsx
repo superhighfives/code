@@ -3,6 +3,7 @@ import type { SatoriOptions } from "satori";
 import satori, { init as initSatori } from "satori/wasm";
 import { loadGoogleFont } from "workers-og";
 import initYoga from "yoga-wasm-web";
+import { socialBackground } from "~/utils/images";
 // @ts-expect-error: wasm is untyped in Vite
 import RESVG_WASM from "../../vendor/resvg.wasm";
 // @ts-expect-error: wasm is untyped in Vite
@@ -33,10 +34,6 @@ let initialised = false;
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { origin, searchParams } = new URL(request.url);
-
-  const url = new URL(origin);
-  url.pathname = "/social-default.png";
-  const background = await fetch(url).then((res) => res.body);
 
   console.log(origin, params);
   const slug = searchParams.get("slug");
@@ -91,7 +88,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         style={{
           width: options.width,
           height: options.height,
-          background: `url(${origin}/social-default.png)`,
+          background: `url(${socialBackground})`,
           backgroundSize: "1200 630",
           padding: "100px",
           color: "white",
@@ -137,12 +134,16 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       },
     });
   } catch (_e) {
-    return new Response(background, {
-      status: 200,
-      headers: {
-        "Content-Type": "image/png",
-        "cache-control": "public, immutable, no-transform, max-age=31536000",
+    // Decode base64-encoded string and return as PNG response
+    return new Response(
+      Uint8Array.from(atob(socialBackground), (c) => c.charCodeAt(0)),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "image/png",
+          "cache-control": "public, immutable, no-transform, max-age=31536000",
+        },
       },
-    });
+    );
   }
 }
