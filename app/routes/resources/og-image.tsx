@@ -33,6 +33,22 @@ let initialised = false;
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { origin, searchParams } = new URL(request.url);
+
+  const url = new URL(origin);
+  url.pathname = "/social-default.png";
+  const background = await fetch(url).then((res) => res.body);
+
+  function base64Encode(buf: ArrayBuffer) {
+    let string = "";
+    new Uint8Array(buf).forEach((byte) => {
+      string += String.fromCharCode(byte);
+    });
+    return btoa(string);
+  }
+
+  const upstreamResponse = await fetch(url);
+  const backgroundBase64 = base64Encode(await upstreamResponse.arrayBuffer());
+
   console.log(origin, params);
   const slug = searchParams.get("slug");
 
@@ -86,7 +102,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         style={{
           width: options.width,
           height: options.height,
-          background: `url(${origin}/social-default.png)`,
+          background: `url(data:image/png;base64,${backgroundBase64})`,
           backgroundSize: "1200 630",
           padding: "100px",
           color: "white",
@@ -128,16 +144,11 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       status: 200,
       headers: {
         "Content-Type": "image/png",
-        "cache-control": "public, immutable, no-transform, max-age=31536000",
+        "cache-control": "no-cache",
       },
     });
-  } catch (e) {
-    console.log(e);
-    console.log(origin);
-    const url = new URL(origin);
-    url.pathname = "/social-default.png";
-    const png = await fetch(url).then((res) => res.body);
-    return new Response(png, {
+  } catch (_e) {
+    return new Response(background, {
       status: 200,
       headers: {
         "Content-Type": "image/png",
