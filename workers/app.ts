@@ -6,6 +6,7 @@ declare module "react-router" {
       env: Env;
       ctx: ExecutionContext;
     };
+    assets: Fetcher;
   }
 }
 
@@ -18,6 +19,7 @@ export default {
   fetch(request, env, ctx) {
     return requestHandler(request, {
       cloudflare: { env, ctx },
+      assets: env.ASSETS,
     });
   },
 } satisfies ExportedHandler<Env>;

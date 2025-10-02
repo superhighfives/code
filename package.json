@@ -6,6 +6,7 @@
     "@conform-to/zod": "^1.11.0",
     "@epic-web/client-hints": "^1.3.8",
     "@epic-web/invariant": "^1.0.0",
+    "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@paper-design/shaders-react": "^0.0.55",
     "@resvg/resvg-wasm": "^2.6.2",
@@ -18,10 +19,8 @@
     "react-dom": "^19.0.0",
     "react-live": "^4.1.8",
     "react-router": "7.6.3",
-    "react-router-mdx": "^1.0.7",
     "remix-utils": "^9.0.0",
     "satori": "^0.10.13",
-    "vite-plugin-wasm-module-workers": "^0.0.2",
     "workers-og": "^0.0.27",
     "yoga-wasm-web": "^0.3.3",
     "zod": "^4.1.11"

@@ -1,19 +1,32 @@
-import { useMdxAttributes, useMdxComponent } from "react-router-mdx/client";
-import { loadMdx } from "react-router-mdx/server";
+import { useLoaderData } from "react-router";
+import { loadMdxFromAssets, type MdxData } from "~/lib/mdx";
 import type { Route } from "./+types/post";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return loadMdx(request);
+export async function loader({
+  params,
+  request,
+  context,
+}: Route.LoaderArgs): Promise<MdxData> {
+  const { slug } = params;
+  if (!slug) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const mdxData = await loadMdxFromAssets(slug, context.assets, request);
+  if (!mdxData) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  return mdxData;
 }
 
 export default function Post() {
-  const Component = useMdxComponent();
-  const attributes = useMdxAttributes();
+  const { content, attributes } = useLoaderData<typeof loader>();
 
   return (
     <section>
       <h1>{attributes.title}</h1>
-      <Component />
+      <div>{content}</div>
     </section>
   );
 }

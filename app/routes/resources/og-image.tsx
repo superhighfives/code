@@ -1,4 +1,3 @@
-import { env } from "cloudflare:workers";
 import { Buffer } from "node:buffer";
 import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
 import type { SatoriOptions } from "satori";
@@ -34,10 +33,10 @@ export type PostMeta = {
 
 let initialised = false;
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ request, params, context }: Route.LoaderArgs) {
   const { slug } = params;
 
-  const imageResponse = await env.ASSETS.fetch(
+  const imageResponse = await context.assets.fetch(
     new URL(background, request.url),
   );
   const imageBuffer = await imageResponse.arrayBuffer();
