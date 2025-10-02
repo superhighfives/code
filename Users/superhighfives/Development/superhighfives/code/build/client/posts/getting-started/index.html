@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en" class="light"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="modulepreload" href="/assets/manifest-3dd289cc.js"/><link rel="modulepreload" href="/assets/entry.client-DoXPUV-u.js"/><link rel="modulepreload" href="/assets/chunk-QMGIS6GS-COM8fVuR.js"/><link rel="modulepreload" href="/assets/root-Cv_WNey3.js"/><link rel="modulepreload" href="/assets/theme-switch-C57Ux9Kt.js"/><link rel="modulepreload" href="/assets/posts._-C7pE33lc.js"/><title>Getting Started with MDX</title><meta name="description" content="Learn how to use MDX in React Router 7"/><meta property="og:title" content="Getting Started with MDX"/><meta property="og:description" content="Learn how to use MDX in React Router 7"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><link rel="icon" href="/favicon.png" type="image/png"/><script>
+// This block of code allows us to check if the client hints have changed and
+// force a reload of the page with updated hints if they have so you don't get
+// a flash of incorrect content.
+function checkClientHints() {
+	if (!navigator.cookieEnabled) return;
+
+	// set a short-lived cookie to make sure we can set cookies
+	document.cookie = "canSetCookies=1; Max-Age=60; SameSite=Lax; path=/";
+	const canSetCookies = document.cookie.includes("canSetCookies=1");
+	document.cookie = "canSetCookies=; Max-Age=-1; path=/";
+	if (!canSetCookies) return;
+
+	const cookies = document.cookie.split(';').map(c => c.trim()).reduce((acc, cur) => {
+		const [key, value] = cur.split('=');
+		acc[key] = value;
+		return acc;
+	}, {});
+
+	let cookieChanged = false;
+	const hints = [
+	{ name: "CH-prefers-color-scheme", actual: String(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'), value: cookies["CH-prefers-color-scheme"] != null ? cookies["CH-prefers-color-scheme"] : encodeURIComponent("light") }
+	];
+	
+	// Add safety check to prevent infinite refresh scenarios
+	let reloadAttempts = parseInt(sessionStorage.getItem('clientHintReloadAttempts') || '0');
+	if (reloadAttempts > 3) {
+		console.warn('Too many client hint reload attempts, skipping reload to prevent infinite loop');
+		return;
+	}
+	
+	for (const hint of hints) {
+		document.cookie = encodeURIComponent(hint.name) + '=' + encodeURIComponent(hint.actual) + '; Max-Age=31536000; SameSite=Lax; path=/';
+		
+		try {
+			const decodedValue = decodeURIComponent(hint.value);
+			if (decodedValue !== hint.actual) {
+				cookieChanged = true;
+			}
+		} catch (error) {
+			// Handle malformed URI gracefully
+			console.warn('Failed to decode cookie value during client hint check:', error);
+			// If we can't decode the value, assume it's different to be safe
+			cookieChanged = true;
+		}
+	}
+	
+	if (cookieChanged) {
+		// Increment reload attempts counter
+		sessionStorage.setItem('clientHintReloadAttempts', String(reloadAttempts + 1));
+		
+		// Hide the page content immediately to prevent visual flicker
+		const style = document.createElement('style');
+		style.textContent = 'html { visibility: hidden !important; }';
+		document.head.appendChild(style);
+
+		// Trigger the reload
+		window.location.reload();
+	} else {
+		// Reset reload attempts counter if no reload was needed
+		sessionStorage.removeItem('clientHintReloadAttempts');
+	}
+}
+
+checkClientHints();
+</script><link rel="stylesheet" href="/assets/global-b3r8KcWh.css"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap"/></head><body class="font-mono text-sm bg-white dark:bg-gray-950"><div class="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 text-indigo-600 dark:text-indigo-400 overflow-x-hidden"><div class="content-end"><article class="prose prose-gray dark:prose-invert max-w-4xl mx-auto p-8"><header class="mb-8"><h1 class="text-4xl font-bold mb-4">Getting Started with MDX</h1><p class="text-xl text-gray-600 dark:text-gray-400 mb-4">Learn how to use MDX in React Router 7</p><div class="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400"><span>By <!-- -->Claude</span><span>1/1/2025</span><div class="flex gap-2"><span class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">tutorial</span><span class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">mdx</span><span class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">react-router</span></div></div></header><div class="mdx-content"><div><h1>Getting Started with MDX</h1><p>Learn how to use MDX in React Router 7</p><p>This MDX content is loaded from: <!-- -->/Users/superhighfives/Development/superhighfives/code/posts/getting-started.mdx</p></div></div></article></div><div class="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-12 fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl"><div class="flex gap-6"><a class="flex gap-1 leading-tight select-none" href="/" data-discover="true"><span>❯</span><span class="animate-blink step">█</span></a><a class="border-b-2 font-medium hover:text-indigo-500 hover:dark:text-indigo-300 border-indigo-600/20 dark:border-indigo-400/30 hover:border-current hover:border-indigo-600/20 hover:dark:border-indigo-400/30" href="/" data-discover="true">Home</a><a class="border-b-2 font-medium hover:text-indigo-500 hover:dark:text-indigo-300 border-indigo-600/20 dark:border-indigo-400/30 hover:border-current hover:border-indigo-600/20 hover:dark:border-indigo-400/30" href="/about" data-discover="true">About</a></div><div class="flex gap-6"><form id="theme-switch" noValidate="" data-discover="true" action="/resources/theme-switch" method="post"><input type="hidden" name="redirectTo" value="/posts/getting-started"/><input type="hidden" name="theme" value="dark"/><div class="flex gap-2"><button type="submit" class="flex cursor-pointer items-center justify-center"><span>Light</span></button></div></form></div></div></div><script>((storageKey2, restoreKey) => {
+    if (!window.history.state || !window.history.state.key) {
+      let key = Math.random().toString(32).slice(2);
+      window.history.replaceState({ key }, "");
+    }
+    try {
+      let positions = JSON.parse(sessionStorage.getItem(storageKey2) || "{}");
+      let storedY = positions[restoreKey || window.history.state.key];
+      if (typeof storedY === "number") {
+        window.scrollTo(0, storedY);
+      }
+    } catch (error) {
+      console.error(error);
+      sessionStorage.removeItem(storageKey2);
+    }
+  })("react-router-scroll-positions", null)</script><script>window.__reactRouterContext = {"basename":"/","future":{"unstable_middleware":false,"unstable_optimizeDeps":false,"unstable_splitRouteModules":false,"unstable_subResourceIntegrity":false,"unstable_viteEnvironmentApi":true},"routeDiscovery":{"mode":"initial"},"ssr":true,"isSpaMode":false};window.__reactRouterContext.stream = new ReadableStream({start(controller){window.__reactRouterContext.streamController = controller;}}).pipeThrough(new TextEncoderStream());</script><script type="module" async="">import "/assets/manifest-3dd289cc.js";
+import * as route0 from "/assets/root-Cv_WNey3.js";
+import * as route1 from "/assets/posts._-C7pE33lc.js";
+  
+  window.__reactRouterRouteModules = {"root":route0,"getting-started":route1};
+
+import("/assets/entry.client-DoXPUV-u.js");</script><!--$--><script>window.__reactRouterContext.streamController.enqueue("[{\"_1\":2,\"_55\":-5,\"_56\":-5},\"loaderData\",{\"_3\":4,\"_15\":16},\"root\",{\"_5\":6},\"requestInfo\",{\"_7\":8,\"_11\":12,\"_13\":14},\"hints\",{\"_9\":10},\"theme\",\"light\",\"path\",\"/posts/getting-started\",\"userPrefs\",{\"_9\":10},\"getting-started\",{\"_17\":18,\"_42\":43},\"content\",{\"_19\":20,\"_21\":22,\"_23\":-5,\"_24\":-5,\"_25\":26},\"$$typeof\",[\"Y\",\"react.transitional.element\"],\"type\",\"div\",\"key\",\"ref\",\"props\",{\"_27\":28},\"children\",[29,33,37],{\"_19\":20,\"_21\":30,\"_23\":-5,\"_24\":-5,\"_25\":31},\"h1\",{\"_27\":32},\"Getting Started with MDX\",{\"_19\":20,\"_21\":34,\"_23\":-5,\"_24\":-5,\"_25\":35},\"p\",{\"_27\":36},\"Learn how to use MDX in React Router 7\",{\"_19\":20,\"_21\":34,\"_23\":-5,\"_24\":-5,\"_25\":38},{\"_27\":39},[40,41],\"This MDX content is loaded from: \",\"/Users/superhighfives/Development/superhighfives/code/posts/getting-started.mdx\",\"attributes\",{\"_44\":32,\"_45\":36,\"_46\":47,\"_48\":49,\"_50\":51},\"title\",\"description\",\"author\",\"Claude\",\"publishedAt\",\"2025-01-02T00:00:00.000Z\",\"tags\",[52,53,54],\"tutorial\",\"mdx\",\"react-router\",\"actionData\",\"errors\"]\n");</script><!--$?--><template id="B:0"></template><!--/$--><!--/$--><div hidden id="S:0"><script>window.__reactRouterContext.streamController.close();</script></div><script>$RC=function(b,c,e){c=document.getElementById(c);c.parentNode.removeChild(c);var a=document.getElementById(b);if(a){b=a.previousSibling;if(e)b.data="$!",a.setAttribute("data-dgst",e);else{e=b.parentNode;a=b.nextSibling;var f=0;do{if(a&&8===a.nodeType){var d=a.data;if("/$"===d)if(0===f)break;else f--;else"$"!==d&&"$?"!==d&&"$!"!==d||f++}d=a.nextSibling;e.removeChild(a);a=d}while(a);for(;c.firstChild;)e.insertBefore(c.firstChild,a);b.data="$"}b._reactRetry&&b._reactRetry()}};$RC("B:0","S:0")</script></body></html>
