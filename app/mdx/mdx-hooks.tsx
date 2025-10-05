@@ -13,8 +13,9 @@ export function useMdxComponent(components?: MDXComponents) {
       <SafeMdxRenderer
         markdown={__raw}
         components={components}
-        {...attributes}
         mdast={ast}
+        allowClientEsmImports={true}
+        {...attributes}
       />
     );
   };
