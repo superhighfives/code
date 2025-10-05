@@ -1,3 +1,5 @@
+import { components } from "~/components/components";
+import tags from "~/components/tags";
 import { useMdxAttributes, useMdxComponent } from "~/lib/mdx-hooks";
 import type { PostLoaderData } from "~/lib/types";
 import { loadMdxRuntime } from "../lib/mdx-runtime";
@@ -14,37 +16,10 @@ export async function loader({
 }
 
 export function meta({ data }: Route.MetaArgs) {
-  if (!data) return [{ title: "Post" }];
-
+  if (!data) return tags();
   const { attributes } = data;
-  return [
-    { title: attributes.title || "Post" },
-    { name: "description", content: attributes.description || "" },
-    { property: "og:title", content: attributes.title || "Post" },
-    {
-      property: "og:description",
-      content: attributes.description || "",
-    },
-  ];
+  return tags(attributes);
 }
-
-const components = {
-  YouTube: ({ id }: { id: string }) => {
-    return (
-      <iframe
-        width="560"
-        height="315"
-        src={`https://www.youtube.com/embed/${id}`}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-        className="rounded-lg shadow-lg"
-      />
-    );
-  },
-};
 
 export default function Post() {
   const Component = useMdxComponent(components);

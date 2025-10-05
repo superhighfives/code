@@ -1,22 +1,11 @@
+import type { PostFrontmatter } from "~/lib/types";
+
 function generateImage(slug: string) {
-  const url = new URL(
-    `${import.meta.env.PROD ? "https://code.charliegleason.com" : "http://localhost:5173"}/resource/og`,
-  );
-  url.searchParams.set("slug", slug);
-  return url.toString();
+  return `${import.meta.env.PROD ? "https://code.charliegleason.com" : "http://localhost:8080"}/resources/og-image/${slug}`;
 }
 
-export default function tags({
-  title,
-  description,
-  slug,
-  image = false,
-}: {
-  title?: string;
-  description?: string;
-  slug?: string;
-  image?: boolean;
-} = {}) {
+export default function tags(attributes?: PostFrontmatter) {
+  const { title, description, slug, image } = attributes || {};
   const metaTitle = `${title ? `${title} ` : ""}❯ ~/code.charliegleason.com`;
   const metaDescription = description
     ? `${description}`
