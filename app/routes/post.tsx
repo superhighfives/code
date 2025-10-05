@@ -1,20 +1,29 @@
-import { useLoaderData } from "react-router";
-import { loadMdxRuntime } from "../lib/mdx-runtime.js";
+import { useMdxAttributes, useMdxComponent } from "~/lib/mdx-hooks";
+import type { PostLoaderData } from "~/lib/types";
+import { loadMdxRuntime } from "../lib/mdx-runtime";
 import type { Route } from "./+types/post";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return loadMdxRuntime(request);
+export async function loader({
+  request,
+}: Route.LoaderArgs): Promise<PostLoaderData> {
+  const { content, frontmatter } = await loadMdxRuntime(request);
+  return {
+    __raw: content as string,
+    attributes: frontmatter,
+  };
 }
 
 export function meta({ data }: Route.MetaArgs) {
-  const { attributes } = data || { attributes: {} };
+  if (!data) return [{ title: "Post" }];
+
+  const { attributes } = data;
   return [
-    { title: (attributes as any).title || "Post" },
-    { name: "description", content: (attributes as any).description || "" },
-    { property: "og:title", content: (attributes as any).title || "Post" },
+    { title: attributes.title || "Post" },
+    { name: "description", content: attributes.description || "" },
+    { property: "og:title", content: attributes.title || "Post" },
     {
       property: "og:description",
-      content: (attributes as any).description || "",
+      content: attributes.description || "",
     },
   ];
 }
@@ -38,7 +47,8 @@ const components = {
 };
 
 export default function Post() {
-  const { content, attributes } = useLoaderData<typeof loader>();
+  const Component = useMdxComponent(components);
+  const attributes = useMdxAttributes();
 
   return (
     <article className="prose prose-gray dark:prose-invert max-w-4xl mx-auto p-8">
@@ -68,7 +78,9 @@ export default function Post() {
           )}
         </div>
       </header>
-      <div className="mdx-content">{content}</div>
+      <div className="mdx-content">
+        <Component />
+      </div>
     </article>
   );
 }

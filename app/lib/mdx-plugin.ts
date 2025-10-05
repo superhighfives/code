@@ -1,10 +1,9 @@
-import { compile } from "@mdx-js/mdx";
 import { readdirSync, readFileSync, statSync } from "fs";
 import matter from "gray-matter";
 import { resolve } from "path";
-import remarkFrontmatter from "remark-frontmatter";
 import type { Plugin } from "vite";
 import type { MdxFile, MdxOptions } from "./mdx.server";
+import type { PostFrontmatter } from "./types";
 
 function findMdxFiles(dir: string): string[] {
   const files: string[] = [];
@@ -30,6 +29,26 @@ function findMdxFiles(dir: string): string[] {
   return files;
 }
 
+function parseFilenameParts(filename: string): {
+  slug: string;
+  date?: Date;
+  publishedAt?: string;
+} {
+  // Check if filename matches YYYY-MM-DD.slug.mdx pattern
+  const dateSlugMatch = filename.match(/^(\d{4})-(\d{2})-(\d{2})\.(.+)\.mdx?$/);
+
+  if (dateSlugMatch) {
+    const [, year, month, day, slug] = dateSlugMatch;
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const publishedAt = `${year}-${month}-${day}`;
+    return { slug, date, publishedAt };
+  }
+
+  // Fallback to regular filename parsing
+  const slug = filename.replace(/\.mdx?$/, "");
+  return { slug };
+}
+
 function transformFilePathToUrlPath(
   filePath: string,
   basePath: string,
@@ -38,28 +57,47 @@ function transformFilePathToUrlPath(
   const relativePath = filePath
     .replace(basePath + "/", "")
     .replace(basePath + "\\", "");
-  const urlPath = relativePath.replace(/\.mdx?$/, "").replace(/\\/g, "/");
+  const filename = relativePath.replace(/\\/g, "/");
 
+  // Parse filename to extract clean slug
+  const { slug } = parseFilenameParts(filename);
+
+  // For posts, create clean URLs without the base path prefix
+  if (basePath.endsWith("posts") || alias === "posts") {
+    return `/${slug}`;
+  }
+
+  // For other content, keep the original behavior
   const finalAlias = alias || basePath.split("/").pop() || "posts";
-  return `/${finalAlias}/${urlPath}`;
+  return `/${finalAlias}/${slug}`;
 }
 
-async function processFile(
+function processFile(
   filePath: string,
-): Promise<{ attributes: Record<string, any>; compiledSource: string }> {
+): { attributes: PostFrontmatter; rawContent: string } {
   const content = readFileSync(filePath, "utf-8");
   const { data: attributes, content: mdxContent } = matter(content);
 
-  const compiled = await compile(mdxContent, {
-    outputFormat: "function-body",
-    remarkPlugins: [remarkFrontmatter],
-    development: false,
-    jsxImportSource: "react",
-  });
+  // Extract date information from filename
+  const filename =
+    filePath.split("/").pop() || filePath.split("\\").pop() || "";
+  const { slug, date, publishedAt } = parseFilenameParts(filename);
+
+  // Merge filename data with frontmatter
+  const mergedAttributes: PostFrontmatter = {
+    ...attributes,
+    slug: attributes.slug || slug,
+    publishedAt: attributes.publishedAt || publishedAt,
+  };
+
+  // Add date if extracted from filename (don't override frontmatter date)
+  if (date && !attributes.date) {
+    mergedAttributes.date = date.toISOString();
+  }
 
   return {
-    attributes,
-    compiledSource: String(compiled),
+    attributes: mergedAttributes,
+    rawContent: mdxContent,
   };
 }
 
@@ -92,20 +130,24 @@ export function mdxPlugin(): Plugin {
 
         for (const filePath of filePaths) {
           try {
-            const { attributes, compiledSource } = await processFile(filePath);
+            const { attributes, rawContent } = processFile(filePath);
             const urlPath = transformFilePathToUrlPath(filePath, basePath);
-            const slug = filePath
-              .replace(basePath + "/", "")
-              .replace(basePath + "\\", "")
-              .replace(/\.mdx?$/, "")
-              .replace(/\\/g, "/");
+
+            // Use the slug from attributes (which includes filename parsing)
+            const slug =
+              attributes.slug ||
+              filePath
+                .replace(basePath + "/", "")
+                .replace(basePath + "\\", "")
+                .replace(/\.mdx?$/, "")
+                .replace(/\\/g, "/");
 
             manifest.files.push({
               path: filePath,
               slug,
               urlPath,
               attributes,
-              compiledSource,
+              rawContent,
             });
           } catch (error) {
             console.warn(`Failed to process MDX file: ${filePath}`, error);
@@ -146,21 +188,24 @@ export function mdxPlugin(): Plugin {
 
           for (const filePath of filePaths) {
             try {
-              const { attributes, compiledSource } =
-                await processFile(filePath);
+              const { attributes, rawContent } = processFile(filePath);
               const urlPath = transformFilePathToUrlPath(filePath, basePath);
-              const slug = filePath
-                .replace(basePath + "/", "")
-                .replace(basePath + "\\", "")
-                .replace(/\.mdx?$/, "")
-                .replace(/\\/g, "/");
+
+              // Use the slug from attributes (which includes filename parsing)
+              const slug =
+                attributes.slug ||
+                filePath
+                  .replace(basePath + "/", "")
+                  .replace(basePath + "\\", "")
+                  .replace(/\.mdx?$/, "")
+                  .replace(/\\/g, "/");
 
               manifest.files.push({
                 path: filePath,
                 slug,
                 urlPath,
                 attributes,
-                compiledSource,
+                rawContent,
               });
             } catch (error) {
               console.warn(`Failed to process MDX file: ${filePath}`, error);

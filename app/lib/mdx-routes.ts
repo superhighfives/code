@@ -51,15 +51,15 @@ export async function loadMdx(request: Request, explicitOptions?: MdxOptions) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  let compiledSource = mdxFile.compiledSource;
+  let rawContent = mdxFile.rawContent;
 
-  if (!compiledSource) {
+  if (!rawContent) {
     const result = await processMdxFile(mdxFile.path);
-    compiledSource = result.compiledSource;
+    rawContent = result.rawContent;
   }
 
   return {
-    __raw: compiledSource,
+    __raw: rawContent,
     attributes: mdxFile.attributes,
   };
 }

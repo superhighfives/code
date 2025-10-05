@@ -8,7 +8,11 @@
       "WebFetch(domain:developers.cloudflare.com)",
       "Read(//Users/superhighfives/Development/superhighfives/react-router-mdx/**)",
       "Bash(curl:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(pkill:*)",
+      "Bash(cat:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

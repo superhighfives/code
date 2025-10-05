@@ -1,35 +1,31 @@
-import React from 'react'
-import { useLoaderData } from 'react-router'
-import { MDXProvider } from '@mdx-js/react'
+import { useLoaderData } from "react-router";
+import { SafeMdxRenderer } from "safe-mdx";
+import { mdxParse } from "safe-mdx/parse";
+import type { LoadData, MDXComponents, MdxAttributes } from "./types";
 
-export interface LoadData {
-  content: React.ComponentType<any>
-  attributes: Record<string, any>
+export function useMdxComponent<T extends MDXComponents>(components?: T) {
+  const { attributes, __raw } = useLoaderData<LoadData>();
+
+  return () => {
+    const ast = mdxParse(__raw);
+
+    return (
+      <SafeMdxRenderer
+        markdown={__raw}
+        components={components}
+        {...attributes}
+        mdast={ast}
+      />
+    );
+  };
 }
 
-const useMdxComponent = (components?: any) => {
-  const { content: Component, attributes } = useLoaderData<LoadData>()
+export const useMdxFiles = () => {
+  return useLoaderData<MdxAttributes[]>();
+};
 
-  if (!Component) {
-    throw new Error('No MDX component found in loader data. Make sure you are using loadMdx in your route loader.')
-  }
+export const useMdxAttributes = () => {
+  const { attributes } = useLoaderData<LoadData>();
 
-  return () => React.createElement(MDXProvider, null,
-    React.createElement(Component, { components, ...attributes })
-  )
-}
-
-const useMdxAttributes = () => {
-  const { attributes } = useLoaderData<LoadData>()
-
-  if (!attributes) {
-    throw new Error('No MDX attributes found in loader data. Make sure you are using loadMdx in your route loader.')
-  }
-
-  return attributes
-}
-
-export default {
-  useMdxComponent,
-  useMdxAttributes
-}
+  return attributes;
+};
