@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { mdxPlugin } from "./app/mdx/mdx-plugin";
+import { mdxPlugin } from "./lib/mdx-plugin";
 
 export default defineConfig({
   plugins: [

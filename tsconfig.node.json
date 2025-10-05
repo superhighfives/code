@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["tailwind.config.ts", "vite.config.ts"],
+  "include": ["tailwind.config.ts", "vite.config.ts", "lib/mdx-plugin.ts",],
   "compilerOptions": {
     "composite": true,
     "strict": true,

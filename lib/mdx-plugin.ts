@@ -2,7 +2,21 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import matter from "gray-matter";
 import type { Plugin } from "vite";
-import type { MdxFile, MdxOptions, PostFrontmatter } from "./types";
+
+interface ContentOptions {
+  path?: string;
+  paths?: string[];
+  alias?: string;
+  aliases?: string[];
+}
+
+interface ContentFile<T = Record<string, unknown>> {
+  path: string;
+  slug: string;
+  urlPath: string;
+  attributes: T;
+  rawContent: string;
+}
 
 function findMdxFiles(dir: string): string[] {
   const files: string[] = [];
@@ -76,7 +90,7 @@ function transformFilePathToUrlPath(
 }
 
 function processFile(filePath: string): {
-  attributes: PostFrontmatter;
+  attributes: Record<string, unknown>;
   rawContent: string;
 } {
   const content = readFileSync(filePath, "utf-8");
@@ -88,7 +102,7 @@ function processFile(filePath: string): {
   const { slug, date, publishedAt } = parseFilenameParts(filename);
 
   // Merge filename data with frontmatter
-  const mergedAttributes: PostFrontmatter = {
+  const mergedAttributes: Record<string, unknown> = {
     ...attributes,
     slug: attributes.slug || slug,
     publishedAt: attributes.publishedAt || publishedAt,
@@ -118,7 +132,7 @@ export function mdxPlugin(): Plugin {
       if (!isBuild) return;
 
       // Generate MDX manifest during build
-      const options: MdxOptions = { path: "posts" }; // This could be configurable
+      const options: ContentOptions = { path: "posts" }; // This could be configurable
       const paths =
         "path" in options && typeof options.path === "string"
           ? [options.path]
@@ -126,7 +140,7 @@ export function mdxPlugin(): Plugin {
 
       if (paths.length === 0) return;
 
-      const manifest: { files: MdxFile[] } = { files: [] };
+      const manifest: { files: ContentFile[] } = { files: [] };
 
       for (let pathIndex = 0; pathIndex < paths.length; pathIndex++) {
         const basePath = resolve(process.cwd(), paths[pathIndex]);
@@ -141,13 +155,14 @@ export function mdxPlugin(): Plugin {
             const urlPath = transformFilePathToUrlPath(filePath, basePath);
 
             // Use the slug from attributes (which includes filename parsing)
-            const slug =
+            const slug = `${
               attributes.slug ||
               filePath
-                .replace(basePath + "/", "")
-                .replace(basePath + "\\", "")
+                .replace(`${basePath}/`, "")
+                .replace(`${basePath}\\`, "")
                 .replace(/\.mdx?$/, "")
-                .replace(/\\/g, "/");
+                .replace(/\\/g, "/")
+            }`;
 
             manifest.files.push({
               path: filePath,
@@ -177,7 +192,7 @@ export function mdxPlugin(): Plugin {
     async load(id) {
       if (id === "virtual:mdx-manifest") {
         // Generate manifest for both dev and build
-        const options: MdxOptions = { path: "posts" };
+        const options: ContentOptions = { path: "posts" };
         const paths =
           "path" in options && typeof options.path === "string"
             ? [options.path]
@@ -187,7 +202,7 @@ export function mdxPlugin(): Plugin {
           return "export default { files: [] }";
         }
 
-        const manifest: { files: MdxFile[] } = { files: [] };
+        const manifest: { files: ContentFile[] } = { files: [] };
 
         for (let pathIndex = 0; pathIndex < paths.length; pathIndex++) {
           const basePath = resolve(process.cwd(), paths[pathIndex]);
@@ -202,13 +217,14 @@ export function mdxPlugin(): Plugin {
               const urlPath = transformFilePathToUrlPath(filePath, basePath);
 
               // Use the slug from attributes (which includes filename parsing)
-              const slug =
+              const slug = `${
                 attributes.slug ||
                 filePath
-                  .replace(basePath + "/", "")
-                  .replace(basePath + "\\", "")
+                  .replace(`${basePath}/`, "")
+                  .replace(`${basePath}\\`, "")
                   .replace(/\.mdx?$/, "")
-                  .replace(/\\/g, "/");
+                  .replace(/\\/g, "/")
+              }`;
 
               manifest.files.push({
                 path: filePath,
@@ -227,7 +243,7 @@ export function mdxPlugin(): Plugin {
       }
 
       if (id === "virtual:mdx-routes") {
-        const options: MdxOptions = { path: "posts" };
+        const options: ContentOptions = { path: "posts" };
         const paths =
           "path" in options && typeof options.path === "string"
             ? [options.path]
