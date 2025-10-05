@@ -1,7 +1,4 @@
 import type { Config } from "@react-router/dev/config";
-import { init } from "./app/mdx/mdx-routes.js";
-
-init({ path: "posts" });
 
 export default {
   ssr: true,

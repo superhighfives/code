@@ -31,7 +31,9 @@ export default function Page({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
         <div className="flex gap-6">
-          <ThemeSwitch userPreference={data?.requestInfo.userPrefs.theme} />
+          {data?.requestInfo.userPrefs.theme && (
+            <ThemeSwitch userPreference={data?.requestInfo.userPrefs.theme} />
+          )}
         </div>
       </div>
     </div>

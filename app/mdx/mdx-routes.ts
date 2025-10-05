@@ -3,21 +3,8 @@ import {
   generateMdxManifest,
   generateMdxManifestSync,
   getMdxFileByUrl,
-  getOptions,
   processMdxFile,
-  setOptions,
 } from "./mdx.server";
-import type { MdxOptions } from "./types";
-
-export function init(options: MdxOptions) {
-  setOptions(options);
-  return {
-    async paths(): Promise<string[]> {
-      const manifest = await generateMdxManifest();
-      return manifest.files.map((file) => file.urlPath);
-    },
-  };
-}
 
 export async function routesAsync(componentPath: string) {
   const manifest = await generateMdxManifest();
@@ -37,11 +24,7 @@ export function routes(componentPath: string) {
   );
 }
 
-export async function loadMdx(request: Request, explicitOptions?: MdxOptions) {
-  if (explicitOptions) {
-    setOptions(explicitOptions);
-  }
-
+export async function loadMdx(request: Request) {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
@@ -64,58 +47,9 @@ export async function loadMdx(request: Request, explicitOptions?: MdxOptions) {
   };
 }
 
-export async function loadAllMdx(
-  filterByPaths?: string[],
-  explicitOptions?: MdxOptions,
-) {
-  const options = explicitOptions || getOptions();
-  const paths =
-    "path" in options && typeof options.path === "string"
-      ? [options.path]
-      : options.paths || [];
-
-  if (paths.length === 0) {
-    if (explicitOptions) {
-      setOptions(explicitOptions);
-    } else {
-      throw new Error(
-        "No MDX paths configured. Please provide options to loadAllMdx() or call init() first.",
-      );
-    }
-  }
-
-  if (explicitOptions) {
-    setOptions(explicitOptions);
-  }
-
-  if (filterByPaths) {
-    const invalidFilters = filterByPaths.filter(
-      (path) => !paths.includes(path),
-    );
-    if (invalidFilters.length > 0) {
-      throw new Error(`${invalidFilters.join(", ")} paths do not exist.`);
-    }
-  }
-
+export async function loadAllMdx() {
   const manifest = await generateMdxManifest();
-  let files = manifest.files;
-
-  if (filterByPaths && filterByPaths.length > 0) {
-    const aliases =
-      "alias" in options && options.alias
-        ? [options.alias]
-        : options.aliases || [];
-
-    const pathsToInclude = paths
-      .map((path, index) => aliases[index] || path)
-      .filter((path) => filterByPaths.includes(path));
-
-    files = files.filter((file) =>
-      pathsToInclude.some((path) => file.urlPath.startsWith(`/${path}/`)),
-    );
-  }
-
-  return files.map((file) => ({
+  return manifest.files.map((file) => ({
     path: file.path,
     slug: file.slug,
     ...file.attributes,
