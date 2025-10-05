@@ -4,10 +4,10 @@ import {
   generateMdxManifestSync,
   getMdxFileByUrl,
   getOptions,
-  type MdxOptions,
   processMdxFile,
   setOptions,
 } from "./mdx.server";
+import type { MdxOptions } from "./types";
 
 export function init(options: MdxOptions) {
   setOptions(options);

@@ -1,4 +1,6 @@
-export const components = {
+import type { MDXComponents } from "~/mdx/types";
+
+export const components: MDXComponents = {
   YouTube: ({ id }: { id: string }) => {
     return (
       <iframe

@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import type { MetaData } from "~/lib/types";
+import type { MetaData } from "~/mdx/types";
 
 export default function Metadata({ data }: { data?: MetaData[] }) {
   return data?.length ? (

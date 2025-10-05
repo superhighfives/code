@@ -1,6 +1,5 @@
 import manifest from "virtual:mdx-manifest";
-import type { MdxFile } from "./mdx.server";
-import type { MdxRuntimeData, Post } from "./types";
+import type { MdxFile, MdxRuntimeData, Post } from "./types";
 
 export async function getRuntimeMdxManifest(): Promise<{ files: MdxFile[] }> {
   return manifest;

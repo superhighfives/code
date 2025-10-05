@@ -2,8 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import matter from "gray-matter";
 import type { Plugin } from "vite";
-import type { MdxFile, MdxOptions } from "./mdx.server";
-import type { PostFrontmatter } from "./types";
+import type { MdxFile, MdxOptions, PostFrontmatter } from "./types";
 
 function findMdxFiles(dir: string): string[] {
   const files: string[] = [];

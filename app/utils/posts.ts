@@ -1,31 +1,21 @@
 import { differenceInMonths, format, parseISO } from "date-fns";
-import type { MetaData } from "~/lib/types";
+import type { MetaData } from "~/mdx/types";
 
-export function getMetaData(data?: MetaData) {
-  return (
-    (data &&
-      Object.entries(data).map(([key, value]) => {
-        return { key, value };
-      })) ||
-    []
-  );
-}
-
-export function processArticleDate(metadata: Array<{ key: string; value: string }>, date?: string) {
+export function processArticleDate(data: MetaData[] = [], date?: string) {
   if (!date) {
-    return { updatedMetadata: metadata, isOldArticle: false };
+    return { metadata: data, isOldArticle: false };
   }
 
   const dateObject = parseISO(date);
-  const updatedMetadata = [
+  const metadata = [
     {
       key: "Last Updated",
       value: format(dateObject, "dd/MM/yyyy"),
     },
-    ...metadata
+    ...data,
   ];
 
   const isOldArticle = differenceInMonths(Date.now(), dateObject) >= 3;
 
-  return { updatedMetadata, isOldArticle };
+  return { metadata, isOldArticle };
 }

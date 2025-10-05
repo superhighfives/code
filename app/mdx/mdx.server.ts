@@ -1,28 +1,14 @@
-import { readFileSync } from "fs";
-import { readFile } from "fs/promises";
+import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import { relative, resolve } from "node:path";
 import { glob, globSync } from "glob";
 import matter from "gray-matter";
-import { relative, resolve } from "path";
-import type { PostFrontmatter } from "./types";
-
-export interface MdxOptions {
-  path?: string;
-  paths?: string[];
-  alias?: string;
-  aliases?: string[];
-}
-
-export interface MdxFile {
-  path: string;
-  slug: string;
-  urlPath: string;
-  attributes: PostFrontmatter;
-  rawContent: string;
-}
-
-export interface MdxManifest {
-  files: MdxFile[];
-}
+import type {
+  MdxFile,
+  MdxManifest,
+  MdxOptions,
+  PostFrontmatter,
+} from "./types";
 
 let options: MdxOptions = {};
 

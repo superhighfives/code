@@ -1,5 +1,5 @@
 import type { Config } from "@react-router/dev/config";
-import { init } from "./app/lib/mdx-routes.js";
+import { init } from "./app/mdx/mdx-routes.js";
 
 init({ path: "posts" });
 

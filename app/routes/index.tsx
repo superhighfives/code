@@ -4,8 +4,8 @@ import { useLoaderData } from "react-router";
 import { About } from "~/components/about";
 import LinkBlock from "~/components/link-block";
 import tags from "~/components/tags";
-import { loadAllMdxRuntime } from "~/lib/mdx-runtime";
-import type { Post } from "~/lib/types";
+import { loadAllMdxRuntime } from "~/mdx/mdx-runtime";
+import type { Post } from "~/mdx/types";
 
 export const meta: MetaFunction = () => tags();
 

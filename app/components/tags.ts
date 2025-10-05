@@ -1,4 +1,4 @@
-import type { PostFrontmatter } from "~/lib/types";
+import type { PostFrontmatter } from "~/mdx/types";
 
 function generateImage(slug: string) {
   return `${import.meta.env.PROD ? "https://code.charliegleason.com" : "http://localhost:8080"}/resources/og-image/${slug}`;

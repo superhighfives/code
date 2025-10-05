@@ -1,5 +1,5 @@
 import { index, type RouteConfig, route } from "@react-router/dev/routes";
-import { routes } from "./lib/mdx-routes";
+import { routes } from "./mdx/mdx-routes";
 
 export default [
   index("routes/index.tsx"),
