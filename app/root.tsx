@@ -76,9 +76,8 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  const theme = useTheme();
   return (
-    <Document theme={theme}>
+    <Document>
       <Page>
         <ErrorView error={error} />
       </Page>

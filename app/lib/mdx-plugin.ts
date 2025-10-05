@@ -1,6 +1,6 @@
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { resolve } from "node:path";
 import matter from "gray-matter";
-import { resolve } from "path";
 import type { Plugin } from "vite";
 import type { MdxFile, MdxOptions } from "./mdx.server";
 import type { PostFrontmatter } from "./types";
@@ -39,7 +39,11 @@ function parseFilenameParts(filename: string): {
 
   if (dateSlugMatch) {
     const [, year, month, day, slug] = dateSlugMatch;
-    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const date = new Date(
+      parseInt(year, 10),
+      parseInt(month, 10) - 1,
+      parseInt(day, 10),
+    );
     const publishedAt = `${year}-${month}-${day}`;
     return { slug, date, publishedAt };
   }
@@ -55,8 +59,8 @@ function transformFilePathToUrlPath(
   alias?: string,
 ): string {
   const relativePath = filePath
-    .replace(basePath + "/", "")
-    .replace(basePath + "\\", "");
+    .replace(`${basePath}/`, "")
+    .replace(`${basePath}\\`, "");
   const filename = relativePath.replace(/\\/g, "/");
 
   // Parse filename to extract clean slug
@@ -72,9 +76,10 @@ function transformFilePathToUrlPath(
   return `/${finalAlias}/${slug}`;
 }
 
-function processFile(
-  filePath: string,
-): { attributes: PostFrontmatter; rawContent: string } {
+function processFile(filePath: string): {
+  attributes: PostFrontmatter;
+  rawContent: string;
+} {
   const content = readFileSync(filePath, "utf-8");
   const { data: attributes, content: mdxContent } = matter(content);
 
@@ -130,6 +135,9 @@ export function mdxPlugin(): Plugin {
 
         for (const filePath of filePaths) {
           try {
+            // Tell Vite to watch this MDX file for changes
+            this.addWatchFile(filePath);
+
             const { attributes, rawContent } = processFile(filePath);
             const urlPath = transformFilePathToUrlPath(filePath, basePath);
 
@@ -188,6 +196,9 @@ export function mdxPlugin(): Plugin {
 
           for (const filePath of filePaths) {
             try {
+              // Tell Vite to watch this MDX file for changes
+              this.addWatchFile(filePath);
+
               const { attributes, rawContent } = processFile(filePath);
               const urlPath = transformFilePathToUrlPath(filePath, basePath);
 

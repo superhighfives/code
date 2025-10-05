@@ -6,11 +6,11 @@ export interface PostFrontmatter {
   author?: string;
   tags?: string[];
   image?: boolean | string;
-  data?: Record<string, unknown>;
+  data?: MetaData;
   slug?: string;
   publishedAt?: string;
   date?: string;
-  [key: string]: unknown;
+  links?: MetaLinks;
 }
 
 export interface Post {
@@ -28,11 +28,11 @@ export interface Post {
 
 export type LoadData = {
   __raw: string;
-  attributes: Record<string, string>;
+  attributes: PostFrontmatter;
 };
 
 export interface MdxComponentProps {
-  components?: Record<string, unknown>;
+  components?: MDXComponents;
 }
 
 export interface MdxRuntimeData {
@@ -58,3 +58,5 @@ export type MdxAttributes = {
   slug: string;
   [key: string]: string;
 };
+
+export type MetaData = { key: string; value: string };

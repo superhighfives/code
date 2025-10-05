@@ -116,7 +116,7 @@ export async function processMdxFile(
 
   // Extract date information from filename
   const filename = filePath.split("/").pop() || "";
-  const { slug, date, publishedAt } = parseFilenameParts(filename);
+  const { slug, publishedAt } = parseFilenameParts(filename);
 
   // Merge filename data with frontmatter
   const mergedAttributes: PostFrontmatter = {
@@ -124,11 +124,6 @@ export async function processMdxFile(
     slug: attributes.slug || slug,
     publishedAt: attributes.publishedAt || publishedAt,
   };
-
-  // Add date if extracted from filename (don't override frontmatter date)
-  if (date && !attributes.date) {
-    mergedAttributes.date = date.toISOString();
-  }
 
   return {
     attributes: mergedAttributes,
