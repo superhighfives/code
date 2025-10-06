@@ -4,11 +4,11 @@ import { cloneElement, isValidElement, type ReactElement } from "react";
 export default function Visual({
   children,
   caption,
-  type,
+  type = "image",
 }: {
   children: ReactElement<{ alt?: string }>;
   caption: string;
-  type: "diagram" | "image";
+  type?: "diagram" | "image";
 }) {
   return (
     <figure className="my-10 space-y-6 [&>svg]:max-w-full [&>svg]:h-auto">

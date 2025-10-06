@@ -9,10 +9,6 @@ links:
 
 import Picture from '../components/picture'
 import Diagram from '../diagrams'
-import PublicPrivateRemixOverview from '../diagrams/public-private-remix-overview'
-import tags from '../components/tags'
-export const meta = tags(frontmatter)
-export const handle = frontmatter
 
 [Salesforce](https://salesforce.com/), where I've spent the last seven years, has a pretty reasonable policy toward sharing design work in portfolios—just put anything that's non-public behind a password.
 
@@ -22,9 +18,9 @@ I was talking to [Glen Maddern](https://twitter.com/geelen), and he mentioned th
 
 ## How does it work?
 
-<Diagram alt="A diagram showing the public / private repo setup in GitHub, and the eventual deployment target using Cloudflare Pages">
-  <PublicPrivateRemixOverview />
-</Diagram>
+<Visual size="large" caption="A diagram showing the public / private repo setup in GitHub, and the eventual deployment target using Cloudflare Pages">
+  <Picture themed src="/images/public-private-remix-diagram.svg" />
+</Visual>
 
 There's a couple of gotchas with this approach, but it's relatively straightforward.
 

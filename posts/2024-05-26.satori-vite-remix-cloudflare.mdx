@@ -7,10 +7,6 @@ links:
   vite-plugin-wasm-module-workers: https://github.com/superhighfives/vite-plugin-wasm-module-workers
 ---
 
-import tags from '../components/tags'
-export const meta = tags(frontmatter)
-export const handle = frontmatter
-
 On Friday night I decided to add [Satori](https://github.com/vercel/satori) to [code.charliegleason.com](https://github.com/superhighfives/code.charliegleason.com/) to automatically generate `og:image`'s for each post.
 
 I'm hosting the site on Cloudflare Pages, which makes it super fast at the edge™. I installed the [Satori WASM requirements](https://github.com/vercel/satori?tab=readme-ov-file#runtime-and-wasm), added [Resvg](https://github.com/RazrFalcon/resvg) to save it as a PNG, and then assumed the pose of a man awaiting success.

@@ -1,7 +1,11 @@
 import { DynamicIcon } from "lucide-react/dynamic";
 import type { MDXComponents } from "~/mdx/types";
+import Picture from "../components/picture";
+import Visual from "../components/visual";
 
 export const components: MDXComponents = {
+  Picture,
+  Visual,
   Icon: ({
     name,
     className,

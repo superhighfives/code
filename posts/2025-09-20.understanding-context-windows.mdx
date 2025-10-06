@@ -5,10 +5,6 @@ description: I thought I understood context windows in AI coding assistants. Tur
 image: true
 ---
 
-import tags from '../components/tags'
-export const meta = tags(frontmatter)
-export const handle = frontmatter
-
 I've been using Claude Code for a while and thought I understood context windows - something about memory limits, and, uh, token usage. When I started actually paying attention to the `/context` command output, I realized there was a bunch of complexity I'd been glossing over.
 
 So I spent some time digging deeper into what's actually happening under the hood. If you're working with Claude Code, you can run `/context` to get something like this:
