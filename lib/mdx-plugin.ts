@@ -27,6 +27,39 @@ export function mdxPlugin(): Plugin {
         source: JSON.stringify(manifest, null, 2),
       });
     },
+    configureServer(server) {
+      // Watch the posts directory for new/deleted files in dev mode
+      server.watcher.add("posts/**/*.{md,mdx}");
+
+      // Invalidate virtual modules when MDX files change
+      server.watcher.on("add", (path) => {
+        if (path.endsWith(".md") || path.endsWith(".mdx")) {
+          const module = server.moduleGraph.getModuleById("virtual:mdx-manifest");
+          if (module) {
+            server.moduleGraph.invalidateModule(module);
+          }
+          const routesModule = server.moduleGraph.getModuleById("virtual:mdx-routes");
+          if (routesModule) {
+            server.moduleGraph.invalidateModule(routesModule);
+          }
+          server.ws.send({ type: "full-reload" });
+        }
+      });
+
+      server.watcher.on("unlink", (path) => {
+        if (path.endsWith(".md") || path.endsWith(".mdx")) {
+          const module = server.moduleGraph.getModuleById("virtual:mdx-manifest");
+          if (module) {
+            server.moduleGraph.invalidateModule(module);
+          }
+          const routesModule = server.moduleGraph.getModuleById("virtual:mdx-routes");
+          if (routesModule) {
+            server.moduleGraph.invalidateModule(routesModule);
+          }
+          server.ws.send({ type: "full-reload" });
+        }
+      });
+    },
     resolveId(id) {
       if (id === "virtual:mdx-manifest" || id === "virtual:mdx-routes") {
         return id;
