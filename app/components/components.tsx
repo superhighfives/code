@@ -1,4 +1,4 @@
-import { DynamicIcon } from "lucide-react/dynamic";
+import { HandMetal } from "lucide-react";
 import type { MDXComponents } from "~/mdx/types";
 import Picture from "../components/picture";
 import Visual from "../components/visual";
@@ -11,18 +11,7 @@ export const components: MDXComponents = {
   CodeBlock,
   Picture,
   Visual,
-  Icon: ({
-    name,
-    className,
-    size,
-  }: {
-    // biome-ignore lint/suspicious/noExplicitAny: lucide-react/dynamic is not typed
-    name: any;
-    className?: string;
-    size?: string;
-  }) => {
-    return <DynamicIcon name={name} className={className} size={size} />;
-  },
+  HandMetal,
   YouTube: ({ id }: { id: string }) => {
     return (
       <iframe
