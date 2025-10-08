@@ -1,3 +1,4 @@
+import { getSandpackCssText } from "@codesandbox/sandpack-react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import stylesheet from "~/global.css?url";
 import { useTheme } from "~/routes/resources/theme-switch";
@@ -36,15 +37,18 @@ export async function loader({ request }: Route.LoaderArgs) {
         theme: getTheme(request),
       },
     },
+    sandpackCss: getSandpackCssText(),
   };
 }
 
 function Document({
   children,
   theme = "light",
+  sandpackCss,
 }: {
   children: React.ReactNode;
   theme?: Theme;
+  sandpackCss?: string;
 }) {
   return (
     <html lang="en" className={theme}>
@@ -54,6 +58,14 @@ function Document({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {sandpackCss && (
+          // biome-ignore lint/correctness/useUniqueElementIds: sandpack css
+          <style
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: sandpack css
+            dangerouslySetInnerHTML={{ __html: sandpackCss }}
+            id="sandpack"
+          />
+        )}
       </head>
       <body className="font-mono text-sm bg-white dark:bg-gray-950">
         {children}
@@ -64,10 +76,10 @@ function Document({
   );
 }
 
-export default function App() {
+export default function App({ loaderData }: Route.ComponentProps) {
   const theme = useTheme();
   return (
-    <Document theme={theme}>
+    <Document theme={theme} sandpackCss={loaderData.sandpackCss}>
       <Page>
         <Outlet />
       </Page>

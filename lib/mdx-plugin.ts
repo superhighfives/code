@@ -34,11 +34,14 @@ export function mdxPlugin(): Plugin {
       // Invalidate virtual modules when MDX files change
       server.watcher.on("add", (path) => {
         if (path.endsWith(".md") || path.endsWith(".mdx")) {
-          const module = server.moduleGraph.getModuleById("virtual:mdx-manifest");
+          const module = server.moduleGraph.getModuleById(
+            "virtual:mdx-manifest",
+          );
           if (module) {
             server.moduleGraph.invalidateModule(module);
           }
-          const routesModule = server.moduleGraph.getModuleById("virtual:mdx-routes");
+          const routesModule =
+            server.moduleGraph.getModuleById("virtual:mdx-routes");
           if (routesModule) {
             server.moduleGraph.invalidateModule(routesModule);
           }
@@ -48,11 +51,14 @@ export function mdxPlugin(): Plugin {
 
       server.watcher.on("unlink", (path) => {
         if (path.endsWith(".md") || path.endsWith(".mdx")) {
-          const module = server.moduleGraph.getModuleById("virtual:mdx-manifest");
+          const module = server.moduleGraph.getModuleById(
+            "virtual:mdx-manifest",
+          );
           if (module) {
             server.moduleGraph.invalidateModule(module);
           }
-          const routesModule = server.moduleGraph.getModuleById("virtual:mdx-routes");
+          const routesModule =
+            server.moduleGraph.getModuleById("virtual:mdx-routes");
           if (routesModule) {
             server.moduleGraph.invalidateModule(routesModule);
           }

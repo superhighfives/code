@@ -23,3 +23,7 @@ export default {
     });
   },
 } satisfies ExportedHandler<Env>;
+
+if (import.meta.hot) {
+  import.meta.hot.accept();
+}
