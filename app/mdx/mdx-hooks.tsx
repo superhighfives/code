@@ -1,7 +1,9 @@
 import { useLoaderData } from "react-router";
 import { SafeMdxRenderer } from "safe-mdx";
 import { mdxParse } from "safe-mdx/parse";
+import type { BundledLanguage } from "shiki";
 import LiveCodeBlock from "~/components/live-code-block";
+import { Code } from "~/components/static-code-block";
 import type { MDXComponents, MdxAttributes, PostLoaderData } from "./types";
 
 function parseMetaString(
@@ -40,7 +42,19 @@ export function useMdxComponent(components?: MDXComponents) {
           if (node.type === "code") {
             const meta = parseMetaString(node.meta);
             if (meta.live) {
-              return <LiveCodeBlock live code={node.value} />;
+              return (
+                <div className="not-prose">
+                  <LiveCodeBlock live code={node.value} />
+                </div>
+              );
+            } else {
+              return (
+                <div className="not-prose">
+                  <Code lang={(node.lang as BundledLanguage) ?? ""}>
+                    {node.value}
+                  </Code>
+                </div>
+              );
             }
           }
         }}
