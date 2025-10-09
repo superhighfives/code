@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { BundledLanguage } from "shiki";
+import { type BundledLanguage, codeToHtml } from "shiki";
 
 export interface CodeProps {
   children?: string;
@@ -15,26 +15,7 @@ export const Code = (props: CodeProps) => {
       return;
     }
 
-    // https://shiki.style/guide/install#fine-grained-bundle
-    import("shiki").then(
-      async ({ getSingletonHighlighterCore, createOnigurumaEngine }) => {
-        const highlighter = await getSingletonHighlighterCore({
-          themes: [import("shiki/themes/dracula.mjs")],
-          langs: [
-            import("shiki/langs/javascript.mjs"),
-            import("shiki/langs/typescript.mjs"),
-            import("shiki/langs/json.mjs"),
-            import("shiki/langs/shell.mjs"),
-            import("shiki/langs/console.mjs"),
-          ],
-          engine: createOnigurumaEngine(() => import("shiki/wasm")),
-        });
-
-        setHighlightedCode(
-          highlighter.codeToHtml(code, { lang, theme: "dracula" }),
-        );
-      },
-    );
+    codeToHtml(code, { lang, theme: "dracula" }).then(setHighlightedCode);
   }, [code, lang]);
 
   if (!code) {
@@ -42,13 +23,13 @@ export const Code = (props: CodeProps) => {
   }
 
   return (
-    <>
+    <pre className="bg-slate-800 text-slate-400 p-4 rounded overflow-x-auto">
       {highlightedCode ? (
         // biome-ignore lint/security/noDangerouslySetInnerHtml: shiki
         <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       ) : (
         <code>{code}</code>
       )}
-    </>
+    </pre>
   );
 };
