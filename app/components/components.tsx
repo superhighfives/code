@@ -2,7 +2,7 @@ import { HandMetal } from "lucide-react";
 import type { MDXComponents } from "~/mdx/types";
 import Picture from "../components/picture";
 import Visual from "../components/visual";
-import CodeBlock from "./code-block";
+import CodeBlock from "./live-code-block";
 
 export const components: MDXComponents = {
   code: ({ children }: { children: React.ReactNode }) => {
