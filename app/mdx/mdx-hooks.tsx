@@ -1,9 +1,7 @@
-import { Sandpack } from "@codesandbox/sandpack-react";
-import { nightOwl } from "@codesandbox/sandpack-themes";
 import { useLoaderData } from "react-router";
 import { SafeMdxRenderer } from "safe-mdx";
 import { mdxParse } from "safe-mdx/parse";
-import CodeBlock from "~/components/code-block";
+import LiveCodeBlock from "~/components/live-code-block";
 import type { MDXComponents, MdxAttributes, PostLoaderData } from "./types";
 
 function parseMetaString(
@@ -42,9 +40,7 @@ export function useMdxComponent(components?: MDXComponents) {
           if (node.type === "code") {
             const meta = parseMetaString(node.meta);
             if (meta.live) {
-              return (
-                <CodeBlock live dataLanguage={node.lang} code={node.value} />
-              );
+              return <LiveCodeBlock live code={node.value} />;
             }
           }
         }}

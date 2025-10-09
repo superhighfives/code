@@ -1,18 +1,14 @@
 import {
-  Sandpack,
   SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
 } from "@codesandbox/sandpack-react";
 import { nightOwl } from "@codesandbox/sandpack-themes";
-import type { ReactNode } from "react";
 
 interface PreProps {
-  children?: ReactNode;
   live?: boolean;
   code: string;
-  [key: string]: ReactNode | string | Array<ReactNode | string>;
 }
 
 const css = `body {
@@ -38,21 +34,7 @@ h1 {
 font-size: 1.5rem;
 }`;
 
-export default function CodeBlock({
-  children,
-  live,
-  code,
-  ...props
-}: PreProps) {
-  if (!live) {
-    // Filter out non-DOM props before passing to pre element
-    const { dataLanguage, style, dataTheme, ...domProps } = props;
-    void dataLanguage;
-    void dataTheme;
-    void style;
-    return <pre {...domProps}>{children}</pre>;
-  }
-
+export default function LiveCodeBlock({ code }: PreProps) {
   const extractDependencies = (code: string): Record<string, string> => {
     const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
     const dependencies: Record<string, string> = {};
@@ -71,8 +53,6 @@ export default function CodeBlock({
   };
 
   const dependencies = extractDependencies(code);
-
-  console.log(code, dependencies);
 
   return (
     <SandpackProvider
