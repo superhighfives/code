@@ -90,7 +90,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <Document>
-      <Page>
+      <Page hideTheme={true}>
         <ErrorView error={error} />
       </Page>
     </Document>

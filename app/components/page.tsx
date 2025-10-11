@@ -11,7 +11,13 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
   return className;
 }
 
-export default function Page({ children }: { children: React.ReactNode }) {
+export default function Page({
+  children,
+  hideTheme,
+}: {
+  children: React.ReactNode;
+  hideTheme?: boolean;
+}) {
   const data = useRouteLoaderData<typeof rootLoader>("root");
 
   return (
@@ -30,9 +36,11 @@ export default function Page({ children }: { children: React.ReactNode }) {
             About
           </Link>
         </div>
-        <div className="flex gap-6">
-          <ThemeSwitch userPreference={data?.requestInfo.userPrefs.theme} />
-        </div>
+        {!hideTheme ? (
+          <div className="flex gap-6">
+            <ThemeSwitch userPreference={data?.requestInfo.userPrefs.theme} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
