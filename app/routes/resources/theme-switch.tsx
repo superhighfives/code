@@ -1,11 +1,12 @@
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { invariantResponse } from "@epic-web/invariant";
+import { Laptop, Moon, Sun } from "lucide-react";
 import { data, redirect, useFetcher, useFetchers } from "react-router";
 import { ServerOnly } from "remix-utils/server-only";
 import { z } from "zod/v4";
-import { useHints } from "~/utils/client-hints";
-import { useRequestInfo } from "~/utils/request-info";
+import { useHints, useOptionalHints } from "~/utils/client-hints";
+import { useOptionalRequestInfo, useRequestInfo } from "~/utils/request-info";
 import { setTheme, type Theme } from "~/utils/theme.server";
 import type { Route } from "./+types/theme-switch.ts";
 
@@ -53,9 +54,21 @@ export function ThemeSwitch({
   const nextMode =
     mode === "system" ? "light" : mode === "light" ? "dark" : "system";
   const modeLabel = {
-    light: <span>Light</span>,
-    dark: <span>Dark</span>,
-    system: <span>System</span>,
+    light: (
+      <Sun name="sun">
+        <span className="sr-only">Light</span>
+      </Sun>
+    ),
+    dark: (
+      <Moon name="moon">
+        <span className="sr-only">Dark</span>
+      </Moon>
+    ),
+    system: (
+      <Laptop name="laptop">
+        <span className="sr-only">System</span>
+      </Laptop>
+    ),
   };
 
   return (
@@ -69,7 +82,7 @@ export function ThemeSwitch({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex cursor-pointer items-center justify-center"
+          className="flex size-8 cursor-pointer items-center justify-center"
         >
           {modeLabel[mode]}
         </button>
@@ -109,4 +122,14 @@ export function useTheme() {
     return optimisticMode === "system" ? hints.theme : optimisticMode;
   }
   return requestInfo.userPrefs.theme ?? hints.theme;
+}
+
+export function useOptionalTheme() {
+  const optionalHints = useOptionalHints();
+  const optionalRequestInfo = useOptionalRequestInfo();
+  const optimisticMode = useOptimisticThemeMode();
+  if (optimisticMode) {
+    return optimisticMode === "system" ? optionalHints?.theme : optimisticMode;
+  }
+  return optionalRequestInfo?.userPrefs.theme ?? optionalHints?.theme;
 }

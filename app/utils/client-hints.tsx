@@ -4,14 +4,19 @@
  */
 import { getHintUtils } from "@epic-web/client-hints";
 import {
-  clientHint as colourSchemeHint,
+  clientHint as colorSchemeHint,
   subscribeToSchemeChange,
 } from "@epic-web/client-hints/color-scheme";
-import { useEffect } from "react";
+import { clientHint as timeZoneHint } from "@epic-web/client-hints/time-zone";
+import * as React from "react";
 import { useRevalidator } from "react-router";
-import { useRequestInfo } from "./request-info";
+import { useOptionalRequestInfo, useRequestInfo } from "./request-info";
 
-const hintsUtils = getHintUtils({ theme: colourSchemeHint });
+const hintsUtils = getHintUtils({
+  theme: colorSchemeHint,
+  timeZone: timeZoneHint,
+  // add other hints here
+});
 
 export const { getHints } = hintsUtils;
 
@@ -23,19 +28,26 @@ export function useHints() {
   return requestInfo.hints;
 }
 
+export function useOptionalHints() {
+  const requestInfo = useOptionalRequestInfo();
+  return requestInfo?.hints;
+}
+
 /**
  * @returns inline script element that checks for client hints and sets cookies
  * if they are not set then reloads the page if any cookie was set to an
  * inaccurate value.
  */
-export function ClientHintCheck() {
+export function ClientHintCheck({ nonce }: { nonce: string }) {
   const { revalidate } = useRevalidator();
-  useEffect(() => {
-    subscribeToSchemeChange(() => revalidate());
-  }, [revalidate]);
+  React.useEffect(
+    () => subscribeToSchemeChange(() => revalidate()),
+    [revalidate],
+  );
 
   return (
     <script
+      nonce={nonce}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: required for client hints
       dangerouslySetInnerHTML={{
         __html: hintsUtils.getClientHintCheckScript(),

@@ -1,13 +1,22 @@
 import { getSandpackCssText } from "@codesandbox/sandpack-react";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+} from "react-router";
 import stylesheet from "~/global.css?url";
-import { useTheme } from "~/routes/resources/theme-switch";
+import { useOptionalTheme, useTheme } from "~/routes/resources/theme-switch";
 import type { Theme } from "~/utils/theme.server";
 import { getTheme } from "~/utils/theme.server";
 import type { Route } from "./+types/root";
-import ErrorView from "./components/error-view";
+import GeneralErrorBoundary from "./components/error-boundary";
 import Page from "./components/page";
 import { ClientHintCheck, getHints } from "./utils/client-hints";
+import { getDomainUrl } from "./utils/misc";
+import { useNonce } from "./utils/nonce-provider";
 
 export const links: Route.LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -32,6 +41,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return {
     requestInfo: {
       hints: getHints(request),
+      origin: getDomainUrl(request),
       path: new URL(request.url).pathname,
       userPrefs: {
         theme: getTheme(request),
@@ -43,17 +53,19 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 function Document({
   children,
+  nonce,
   theme = "light",
   sandpackCss,
 }: {
   children: React.ReactNode;
+  nonce: string;
   theme?: Theme;
   sandpackCss?: string;
 }) {
   return (
     <html lang="en" className={theme}>
       <head>
-        <ClientHintCheck />
+        <ClientHintCheck nonce={nonce} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
@@ -76,23 +88,20 @@ function Document({
   );
 }
 
-export default function App({ loaderData }: Route.ComponentProps) {
-  const theme = useTheme();
+export function Layout({ children }: { children: React.ReactNode }) {
+  const nonce = useNonce();
+  const theme = useOptionalTheme();
   return (
-    <Document theme={theme} sandpackCss={loaderData.sandpackCss}>
-      <Page>
-        <Outlet />
-      </Page>
+    <Document nonce={nonce} theme={theme}>
+      <Page>{children}</Page>
     </Document>
   );
 }
 
+export default function App() {
+  return <Outlet />;
+}
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  return (
-    <Document>
-      <Page hideTheme={true}>
-        <ErrorView error={error} />
-      </Page>
-    </Document>
-  );
+  return <GeneralErrorBoundary error={error} />;
 }
