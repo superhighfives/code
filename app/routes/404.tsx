@@ -1,5 +1,5 @@
 import { data } from "react-router";
-import ErrorView from "~/components/error-view";
+import ErrorView from "~/components/error-boundary";
 
 export const loader = async () => {
   return data(null, 404);

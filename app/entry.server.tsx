@@ -1,7 +1,9 @@
+import crypto from "node:crypto";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 import type { AppLoadContext, EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
+import { NonceProvider } from "./utils/nonce-provider";
 
 export default async function handleRequest(
   request: Request,
@@ -12,9 +14,12 @@ export default async function handleRequest(
 ) {
   let shellRendered = false;
   const userAgent = request.headers.get("user-agent");
+  const nonce = crypto.randomBytes(16).toString("hex");
 
   const body = await renderToReadableStream(
-    <ServerRouter context={routerContext} url={request.url} />,
+    <NonceProvider value={nonce}>
+      <ServerRouter context={routerContext} url={request.url} />
+    </NonceProvider>,
     {
       onError(error: unknown) {
         responseStatusCode = 500;
