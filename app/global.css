@@ -33,18 +33,14 @@ body {
   overscroll-behavior-x: none;
 }
 
-code[data-theme*=" "],
-code[data-theme*=" "] span {
-  color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
+.shiki,
+.shiki span {
+  color: var(--shiki-light) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  code[data-theme*=" "],
-  code[data-theme*=" "] span {
-    color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
-  }
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
 }
 
 :root {
@@ -133,4 +129,8 @@ code[data-theme*=" "] span {
 
 .markdown-alert-caution .markdown-alert-title {
   color: var(--github-alert-caution-color);
+}
+
+.code {
+	@apply overflow-x-scroll max-w-[calc(100vw)] -mx-8 sm:-mx-12 border-y py-4 dark:border-gray-700 dark:bg-gray-900 bg-gray-50 text-gray-400 px-8 sm:px-12;
 }

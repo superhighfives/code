@@ -59,11 +59,7 @@ export function ThemeSwitch({
   };
 
   return (
-    <fetcher.Form
-      method="POST"
-      {...getFormProps(form)}
-      action="/resources/theme-switch"
-    >
+    <fetcher.Form method="POST" {...getFormProps(form)} action="/theme-switch">
       <ServerOnly>
         {() => (
           <input type="hidden" name="redirectTo" value={requestInfo.path} />
@@ -88,9 +84,7 @@ export function ThemeSwitch({
  */
 export function useOptimisticThemeMode() {
   const fetchers = useFetchers();
-  const themeFetcher = fetchers.find(
-    (f) => f.formAction === "/resources/theme-switch",
-  );
+  const themeFetcher = fetchers.find((f) => f.formAction === "/theme-switch");
 
   if (themeFetcher?.formData) {
     const submission = parseWithZod(themeFetcher.formData, {

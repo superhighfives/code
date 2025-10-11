@@ -3,8 +3,9 @@ import { routes } from "./mdx/mdx-routes";
 
 export default [
   index("routes/index.tsx"),
-  route("resources/theme-switch", "routes/resources/theme-switch.tsx"),
-  route("resources/og-image/:slug", "routes/resources/og-image.tsx"),
+  route("theme-switch", "routes/resources/theme-switch.tsx"),
+  route(":slug.png", "routes/resources/og-image.tsx"),
+  route("rss", "routes/resources/rss.tsx"),
   ...routes("routes/post.tsx"),
   route("*", "routes/404.tsx"),
 ] satisfies RouteConfig;

@@ -19,7 +19,6 @@ It turns out, [Vite handles WASM files](https://vitejs.dev/guide/features#access
 
 It will, in essence, take this:
 
-<div className="not-prose code">
   ```ts
   import satori, { init as initSatori } from 'satori/wasm'
   import { Resvg, initWasm as initResvg } from '@resvg/resvg-wasm'
@@ -50,11 +49,9 @@ const { default: yogawasm } = await import(
     // more fancy code
 
 ````
-</div>
 
 And turn it into this, on build:
 
-<div className="not-prose code">
 ```ts
 import YOGA_WASM from './assets/yoga-CP4IUfLV.wasm'
 import RESVG_WASM from './assets/index_bg-Blvrv-U2.wasm'
@@ -75,5 +72,3 @@ async function createOGImage(title, requestUrl) {
 
   // more fancy build code
 ````
-
-</div>

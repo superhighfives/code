@@ -5,6 +5,7 @@ import satori, { init as initSatori } from "satori/wasm";
 import { loadGoogleFont } from "workers-og";
 import initYoga from "yoga-wasm-web";
 import background from "~/assets/social-background.png";
+import { loadAllMdxRuntime } from "~/mdx/mdx-runtime";
 // @ts-expect-error: wasm is untyped in Vite
 import RESVG_WASM from "../../vendor/resvg.wasm";
 // @ts-expect-error: wasm is untyped in Vite
@@ -14,24 +15,25 @@ import type { Route } from "./+types/og-image";
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
 
-export type Frontmatter = {
-  title: string;
-  description: string;
-  published: string;
-  featured: boolean;
-  draft: boolean;
-  data: [];
-  links: [];
-};
+let initialisationPromise: Promise<void> | null = null;
 
-export type PostMeta = {
-  slug: string;
-  url?: string;
-  date?: Date;
-  frontmatter: Frontmatter;
-};
-
-let initialised = false;
+async function ensureInitialised() {
+  if (!initialisationPromise) {
+    initialisationPromise = (async () => {
+      try {
+        await initResvg(RESVG_WASM);
+      } catch (_e) {
+        // Already initialized, ignore
+      }
+      try {
+        initSatori(await initYoga(YOGA_WASM));
+      } catch (_e) {
+        // Already initialized, ignore
+      }
+    })();
+  }
+  return initialisationPromise;
+}
 
 export async function loader({ request, params, context }: Route.LoaderArgs) {
   const { slug } = params;
@@ -43,32 +45,20 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
   const imageBase64 = `data:image/png;base64,${Buffer.from(imageBuffer).toString("base64")}`;
 
   try {
-    if (!initialised) {
-      await initResvg(RESVG_WASM);
-      initSatori(await initYoga(YOGA_WASM));
-      initialised = true;
-    }
+    await ensureInitialised();
 
     if (!slug) {
       throw new Error("No slug provided");
     }
 
-    // const url = new URL(origin);
-    // url.pathname = `/${slug}.json`;
-    // const data: PostMeta = await fetch(url).then(
-    //   async (res) => await res.json(),
-    // );
+    const posts = await loadAllMdxRuntime();
+    const post = posts.find((p) => p.slug === slug);
 
-    // if (!data) {
-    //   throw new Error("No data found");
-    // }
+    if (!post) {
+      throw new Error("Post not found");
+    }
 
-    // const { title, description } = data.frontmatter;
-
-    const { title, description } = {
-      title: slug,
-      description: "World",
-    };
+    const { title, description } = post.frontmatter;
 
     const options: SatoriOptions = {
       width: OG_IMAGE_WIDTH,
@@ -132,8 +122,8 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
         "cache-control": "no-cache",
       },
     });
-  } catch (_e) {
-    initialised = true;
+  } catch (e) {
+    console.error("Error generating OG image", e);
     return new Response(imageBuffer, {
       status: 200,
       headers: {

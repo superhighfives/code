@@ -106,10 +106,8 @@ Take the following steps to improve the writing:
 
 ## Techincal specifications
 
-Always wrap code fences (```) in <div className="not-prose code" />. For example:
+Always include the language of code snippets as their extension on the code fence, like so:
 
-<div className="not-prose code">
 ```jsx
 const puppies = "are great"
 ```
-</div>
