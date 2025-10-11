@@ -23,7 +23,6 @@ export interface Post {
   urlPath: string;
   title: string;
   description?: string;
-  author?: string;
   publishedAt?: string;
   date?: Date;
   tags?: string[];
@@ -33,7 +32,6 @@ export interface Post {
 export interface PostFrontmatter {
   title?: string;
   description?: string;
-  author?: string;
   tags?: string[];
   image?: boolean | string;
   data?: MetaData[];

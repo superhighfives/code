@@ -32,7 +32,6 @@ There's a couple of gotchas with this approach, but it's relatively straightforw
 
 You can see the `package.json` I use for this below:
 
-<div className="not-prose code">
 ```json
 {
   "name": "charliegleason.com.auth-routes",
@@ -55,7 +54,6 @@ You can see the `package.json` I use for this below:
   }
 }
 ```
-</div>
 
 ## Breaking it down
 
@@ -65,61 +63,49 @@ So, what does each of these scripts actually do? Let's go through step-by-step.
 
 Start watching files, and sync when they change. Start the dev server.
 
-<div className="not-prose code">
-  ```bash
-  concurrently \"npm run sync:watch\" \"npm --prefix node_modules/charliegleason.com run dev\""
-  ```
-</div>
+```bash
+concurrently \"npm run sync:watch\" \"npm --prefix node_modules/charliegleason.com run dev\""
+```
 
 ### npm run postinstall
 
 Run the initial sync, install the dependencies for the public repo, and copy your local `.dev.vars` into it.
 
-<div className="not-prose code">
-  ```bash
-  npm run sync && npm --prefix node_modules/charliegleason.com install && cp .dev.vars node_modules/charliegleason.com"
-  ```
-</div>
+```bash
+npm run sync && npm --prefix node_modules/charliegleason.com install && cp .dev.vars node_modules/charliegleason.com"
+```
 
 ### npm run sync
 
 Sync your various files, but don't worry about doing it concurrently.
 
-<div className="not-prose code">
-  ```bash
-  npm run sync:files:routes && npm run sync:files:assets && npm run sync:files:data
-  ```
-</div>
+```bash
+npm run sync:files:routes && npm run sync:files:assets && npm run sync:files:data
+```
 
 ### npm run sync:watch
 
 Sync your various files, but this time, also watch them. (There's probably a more succinct way of doing this, but it's for a personal project, so.)
 
-<div className="not-prose code">
-  ```bash
-  concurrently \"npm run sync:files:routes -- -w\" \"npm run sync:files:assets -- -w\" \"npm run sync:files:data -- -w\"
-  ```
-</div>
+```bash
+concurrently \"npm run sync:files:routes -- -w\" \"npm run sync:files:assets -- -w\" \"npm run sync:files:data -- -w\"
+```
 
 ### npm run sync:files:routes,data,assets
 
 For each directory you want to sync, add `syncdir PRIVATE_REPO_FOLDER PUBLIC_REPO_FOLDER`. I ran into some issues with `.DS_Store` files getting copied over on Mac and causing mayhem, so I excluded them.
 
-<div className="not-prose code">
-  ```bash
-  syncdir routes node_modules/charliegleason.com/app/routes --exclude .DS_Store
-  ```
-</div>
+```bash
+syncdir routes node_modules/charliegleason.com/app/routes --exclude .DS_Store
+```
 
 ### npm run update
 
 Force an update for the public repo if you run into any weirdness with stuff not updating. Not strictly necessary, but I came across it a couple times.
 
-<div className="not-prose code">
-  ```bash
-  npm install git://github.com/superhighfives/charliegleason.com.git#main && npm install
-  ```
-</div>
+```bash
+npm install git://github.com/superhighfives/charliegleason.com.git#main && npm install
+```
 
 One of the nice little features of this setup is that you can easily work on the public and private stuff at the same time. Because it's all just `package.json` under the hook, you can take advantage of [npm link](https://docs.npmjs.com/cli/v10/commands/npm-link). Let's say we've got two repos, [charliegleason.com](https://github.com/superhighfives/charliegleason.com) and a private repo. You can jump into the `~/Development/charliegleason.com` repo and run `npm link`. Then jump into the private repo and run `npm link "charliegleason.com"`. Boom. Magic. ✨
 

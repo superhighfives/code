@@ -50,7 +50,6 @@ export async function loadAllMdxRuntime(
       urlPath: file.urlPath,
       title: attributes.title || "Untitled",
       description: attributes.description,
-      author: attributes.author,
       publishedAt: attributes.publishedAt,
       date,
       tags: attributes.tags,

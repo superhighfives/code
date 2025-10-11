@@ -43,13 +43,13 @@ export function useMdxComponent(components?: MDXComponents) {
             const meta = parseMetaString(node.meta);
             if (meta.live) {
               return (
-                <div className="not-prose">
+                <div className="not-prose code">
                   <LiveCodeBlock live code={node.value} />
                 </div>
               );
             } else {
               return (
-                <div className="not-prose">
+                <div className="not-prose code">
                   <Code lang={(node.lang as BundledLanguage) ?? ""}>
                     {node.value}
                   </Code>
