@@ -1,5 +1,6 @@
 import { Buffer } from "node:buffer";
 import { initWasm as initResvg, Resvg } from "@resvg/resvg-wasm";
+import Replicate from "replicate";
 import type { SatoriOptions } from "satori";
 import satori, { init as initSatori } from "satori/wasm";
 import { loadGoogleFont } from "workers-og";
@@ -31,7 +32,25 @@ export type PostMeta = {
   frontmatter: Frontmatter;
 };
 
-let initialised = false;
+let initialisationPromise: Promise<void> | null = null;
+
+async function ensureInitialised() {
+  if (!initialisationPromise) {
+    initialisationPromise = (async () => {
+      try {
+        await initResvg(RESVG_WASM);
+      } catch (e) {
+        // Already initialized, ignore
+      }
+      try {
+        initSatori(await initYoga(YOGA_WASM));
+      } catch (e) {
+        // Already initialized, ignore
+      }
+    })();
+  }
+  return initialisationPromise;
+}
 
 export async function loader({ request, params, context }: Route.LoaderArgs) {
   const { slug } = params;
@@ -43,11 +62,7 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
   const imageBase64 = `data:image/png;base64,${Buffer.from(imageBuffer).toString("base64")}`;
 
   try {
-    if (!initialised) {
-      await initResvg(RESVG_WASM);
-      initSatori(await initYoga(YOGA_WASM));
-      initialised = true;
-    }
+    await ensureInitialised();
 
     if (!slug) {
       throw new Error("No slug provided");
@@ -65,6 +80,25 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 
     // const { title, description } = data.frontmatter;
 
+    const replicate = new Replicate({
+      auth: context.cloudflare.env.REPLICATE_API_TOKEN,
+    });
+
+    const input = {
+      prompt: `A ${slug} in the style of BLUEPRINT with lots of schematics and labels indicating each of the element of the ${slug}.`,
+      output_format: "png",
+    };
+
+    const output = await replicate.run("black-forest-labs/flux-schnell", {
+      input,
+    });
+    1;
+
+    console.log(output[0].url());
+
+    // const output =
+    //   "https://replicate.delivery/xezq/9yuZVIxBfqWAOyCKzKf2WDSefDbo4seUgfUy9sGGQNF4ZYdXF/output.png";
+
     const { title, description } = {
       title: slug,
       description: "World",
@@ -76,7 +110,10 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
       fonts: [
         {
           name: "JetBrainsMono-Semibold",
-          data: await loadGoogleFont({ family: "JetBrains Mono", weight: 600 }),
+          data: await loadGoogleFont({
+            family: "JetBrains Mono",
+            weight: 600,
+          }),
           style: "normal",
         },
       ],
@@ -96,6 +133,20 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
           flexDirection: "column",
         }}
       >
+        <img
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 570,
+            mixBlendMode: "multiply",
+            boxShadow: "0 0 10px 0 rgba(0, 0, 0, 1)",
+          }}
+          width={630}
+          height={630}
+          src={output[0].url().href}
+          alt="Output"
+        />
         <div
           style={{
             display: "block",
@@ -132,8 +183,8 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
         "cache-control": "no-cache",
       },
     });
-  } catch (_e) {
-    initialised = true;
+  } catch (e) {
+    console.error("Render error", e);
     return new Response(imageBuffer, {
       status: 200,
       headers: {

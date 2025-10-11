@@ -9,7 +9,8 @@
   },
   "upload_source_maps": true,
   "vars": {
-    "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
+    "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
+    "REPLICATE_API_TOKEN": ""
   },
   "assets": {
     "directory": "./public/",
