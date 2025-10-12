@@ -6,7 +6,11 @@ import CodeBlock from "./live-code-block";
 
 export const components: MDXComponents = {
   code: ({ children }: { children: React.ReactNode }) => {
-    return <code className="text-4xl bg-gray-800">{children}</code>;
+    return (
+      <code className="mx-0.5 rounded-xs bg-gray-200 dark:bg-gray-800 ring-2 ring-gray-200 dark:ring-gray-800">
+        {children}
+      </code>
+    );
   },
   CodeBlock,
   Picture,
