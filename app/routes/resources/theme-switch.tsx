@@ -49,16 +49,6 @@ export function ThemeSwitch({
     lastResult: fetcher.data?.result,
   });
 
-  // Get optimistic mode directly from this fetcher instance
-  // let optimisticMode: Theme | undefined;
-  // if (fetcher.formData) {
-  //   const submission = parseWithZod(fetcher.formData, {
-  //     schema: ThemeFormSchema,
-  //   });
-  //   if (submission.status === "success") {
-  //     optimisticMode = submission.value.theme;
-  //   }
-  // }
   const optimisticMode = useOptimisticThemeMode();
 
   const mode = optimisticMode ?? userPreference ?? "system";
