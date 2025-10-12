@@ -21,10 +21,14 @@ export async function loader({
   const ast = mdxParse(rawContent);
   const highlightedBlocks: Record<string, string> = {};
 
-  // Find all code blocks and highlight them
+  // Find all code blocks and highlight them (skip live blocks)
   let blockIndex = 0;
   for (const node of ast.children) {
     if (node.type === "code" && node.value) {
+      // Skip live code blocks
+      if (node.meta?.includes("live")) {
+        continue;
+      }
       const key = `code-block-${blockIndex}`;
       highlightedBlocks[key] = await highlightCode(
         node.value,

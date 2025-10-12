@@ -4,7 +4,10 @@ export interface CodeProps {
 
 export const Code = ({ highlightedHtml }: CodeProps) => {
   return (
-    // biome-ignore lint/security/noDangerouslySetInnerHtml: required by shiki
-    <div dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
+    <div
+      className="py-4"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: required by shiki
+      dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+    />
   );
 };

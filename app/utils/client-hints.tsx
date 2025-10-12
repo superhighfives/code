@@ -15,7 +15,6 @@ import { useOptionalRequestInfo, useRequestInfo } from "./request-info";
 const hintsUtils = getHintUtils({
   theme: colorSchemeHint,
   timeZone: timeZoneHint,
-  // add other hints here
 });
 
 export const { getHints } = hintsUtils;

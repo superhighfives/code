@@ -26,7 +26,8 @@ function parseMetaString(
 }
 
 export function useMdxComponent(components?: MDXComponents) {
-  const { attributes, __raw, highlightedBlocks } = useLoaderData<PostLoaderData>();
+  const { attributes, __raw, highlightedBlocks } =
+    useLoaderData<PostLoaderData>();
 
   return () => {
     const ast = mdxParse(__raw);
@@ -47,16 +48,17 @@ export function useMdxComponent(components?: MDXComponents) {
                   <LiveCodeBlock live code={node.value} />
                 </div>
               );
-            } else {
-              const key = `code-block-${blockIndex}`;
-              const highlightedHtml = highlightedBlocks?.[key] || `<pre><code>${node.value}</code></pre>`;
-              blockIndex++;
-              return (
-                <div className="not-prose code">
-                  <Code highlightedHtml={highlightedHtml} />
-                </div>
-              );
             }
+            const key = `code-block-${blockIndex}`;
+            blockIndex++;
+            const highlightedHtml =
+              highlightedBlocks?.[key] ||
+              `<pre><code>${node.value}</code></pre>`;
+            return (
+              <div className="not-prose code">
+                <Code highlightedHtml={highlightedHtml} />
+              </div>
+            );
           }
         }}
         {...attributes}

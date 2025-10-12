@@ -4,7 +4,9 @@ import {
   SandpackPreview,
   SandpackProvider,
 } from "@codesandbox/sandpack-react";
-import { nightOwl } from "@codesandbox/sandpack-themes";
+import { useTheme } from "~/routes/resources/theme-switch";
+import { latte } from "./themes/sandpack-latte";
+import { mocha } from "./themes/sandpack-mocha";
 
 interface PreProps {
   live?: boolean;
@@ -54,9 +56,12 @@ export default function LiveCodeBlock({ code }: PreProps) {
 
   const dependencies = extractDependencies(code);
 
+  const theme = useTheme();
+
   return (
     <SandpackProvider
-      theme={nightOwl}
+      key={theme}
+      theme={theme === "dark" ? mocha : latte}
       files={{
         "/App.tsx": code,
         "/styles.css": { code: css, hidden: true },
@@ -68,6 +73,9 @@ export default function LiveCodeBlock({ code }: PreProps) {
           "sp-layout": "custom-layout",
           "sp-editor": "custom-editor",
           "sp-code-editor": "custom-code-editor",
+          "sp-pre-placeholder": "custom-pre-placeholder",
+          "sp-preview": "custom-preview",
+          "sp-cm": "custom-cm",
         },
       }}
       template="react-ts"

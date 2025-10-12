@@ -1,0 +1,36 @@
+import type { SandpackTheme } from "./types";
+
+export const latte: SandpackTheme = {
+  colors: {
+    surface1: "#eff1f5",
+    surface2: "#ccd0da",
+    surface3: "#bcc0cc",
+    clickable: "#1e66f5",
+    base: "#4c4f69",
+    disabled: "#9ca0b0",
+    hover: "#8839ef",
+    accent: "#8839ef",
+    error: "#d20f39",
+    errorSurface: "#e6e9ef",
+  },
+  syntax: {
+    plain: "#4c4f69",
+    comment: {
+      color: "#7c7f93",
+      fontStyle: "italic",
+    },
+    keyword: "#8839ef",
+    tag: "#1e66f5",
+    punctuation: "#179299",
+    definition: "#ea76cb",
+    property: "#df8e1d",
+    static: "#fe640b",
+    string: "#40a02b",
+  },
+  font: {
+    body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    mono: '"Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace',
+    size: "1em",
+    lineHeight: "20px",
+  },
+};
