@@ -133,4 +133,18 @@ html.dark .shiki span {
 
 .code {
 	@apply overflow-x-scroll max-w-[calc(100vw)] -mx-8 sm:-mx-12 border-y py-4 dark:border-gray-700 dark:bg-gray-900 bg-gray-50 text-gray-400 px-8 sm:px-12;
+
+  /* Sandpack */
+  .custom-wrapper {
+    @apply border-none rounded-none;
+  }
+
+  .custom-layout {
+    @apply border-none rounded-none;
+  }
+
+  .custom-editor,
+  .custom-code-editor {
+    @apply bg-transparent;
+  }
 }

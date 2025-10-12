@@ -4,8 +4,8 @@ import json from "@shikijs/langs/json";
 import jsx from "@shikijs/langs/jsx";
 import tsx from "@shikijs/langs/tsx";
 import typescript from "@shikijs/langs/typescript";
-import vitesseDark from "@shikijs/themes/vitesse-dark";
-import vitesseLight from "@shikijs/themes/vitesse-light";
+import catppuccinLatte from "@shikijs/themes/catppuccin-latte";
+import catppuccinMocha from "@shikijs/themes/catppuccin-mocha";
 import {
   createHighlighterCore,
   createOnigurumaEngine,
@@ -22,7 +22,7 @@ async function getHighlighter(): Promise<HighlighterCore> {
     highlighterPromise = (async () => {
       await loadWasm(ONIG_WASM);
       return await createHighlighterCore({
-        themes: [vitesseLight, vitesseDark],
+        themes: [catppuccinLatte, catppuccinMocha],
         langs: [bash, javascript, json, jsx, tsx, typescript],
         engine: createOnigurumaEngine(),
       });
@@ -39,8 +39,8 @@ export async function highlightCode(
     const highlighter = await getHighlighter();
     return highlighter.codeToHtml(code, {
       themes: {
-        light: "vitesse-light",
-        dark: "vitesse-dark",
+        light: "catppuccin-latte",
+        dark: "catppuccin-mocha",
       },
       lang: lang || "text",
       defaultColor: false,

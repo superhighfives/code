@@ -63,6 +63,12 @@ export default function LiveCodeBlock({ code }: PreProps) {
       }}
       options={{
         externalResources: ["https://cdn.tailwindcss.com"],
+        classes: {
+          "sp-wrapper": "custom-wrapper",
+          "sp-layout": "custom-layout",
+          "sp-editor": "custom-editor",
+          "sp-code-editor": "custom-code-editor",
+        },
       }}
       template="react-ts"
       customSetup={{
