@@ -12,7 +12,8 @@
       "Bash(npm run typecheck:*)",
       "Bash(pkill:*)",
       "Bash(cat:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

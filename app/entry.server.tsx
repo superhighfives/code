@@ -18,7 +18,7 @@ export default async function handleRequest(
 
   const body = await renderToReadableStream(
     <NonceProvider value={nonce}>
-      <ServerRouter context={routerContext} url={request.url} />
+      <ServerRouter context={routerContext} url={request.url} nonce={nonce} />
     </NonceProvider>,
     {
       onError(error: unknown) {
@@ -30,6 +30,7 @@ export default async function handleRequest(
           console.error(error);
         }
       },
+      nonce,
     },
   );
   shellRendered = true;
