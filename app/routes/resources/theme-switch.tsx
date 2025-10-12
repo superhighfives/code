@@ -49,7 +49,16 @@ export function ThemeSwitch({
     lastResult: fetcher.data?.result,
   });
 
-  const optimisticMode = useOptimisticThemeMode();
+  // Get optimistic mode directly from this fetcher instance
+  let optimisticMode: "system" | "light" | "dark" | undefined;
+  if (fetcher.formData) {
+    const submission = parseWithZod(fetcher.formData, {
+      schema: ThemeFormSchema,
+    });
+    if (submission.status === "success") {
+      optimisticMode = submission.value.theme;
+    }
+  }
 
   const mode = optimisticMode ?? userPreference ?? "system";
   const nextMode =
@@ -71,7 +80,7 @@ export function ThemeSwitch({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex size-8 cursor-pointer items-center justify-center"
+          className="flex size-5 cursor-pointer items-center justify-center"
         >
           {modeLabel[mode]}
         </button>

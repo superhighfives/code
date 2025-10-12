@@ -13,11 +13,12 @@ export async function loader() {
   const posts = await loadAllMdxRuntime();
 
   // Sort posts by published date (newest first)
-  const sortedPosts = posts.sort((a: Post, b: Post) => {
-    const dateA = a.date || new Date(a.publishedAt || "1970-01-01");
-    const dateB = b.date || new Date(b.publishedAt || "1970-01-01");
-    return dateB.getTime() - dateA.getTime();
-  });
+  const sortedPosts = posts
+    .filter((post) => post.date)
+    .sort((a: Post, b: Post) => {
+      if (!a.date || !b.date) return 0;
+      return b.date.getTime() - a.date.getTime();
+    });
 
   return { posts: sortedPosts };
 }
