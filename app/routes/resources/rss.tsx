@@ -22,6 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const sortedPosts = files
     .filter((file) => file.attributes.date)
     .sort((a, b) => {
+      if (!a.attributes.date || !b.attributes.date) return 0;
       const dateA = new Date(a.attributes.date);
       const dateB = new Date(b.attributes.date);
       return dateB.getTime() - dateA.getTime();

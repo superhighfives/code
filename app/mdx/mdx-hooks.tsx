@@ -1,7 +1,6 @@
 import { useLoaderData } from "react-router";
 import { SafeMdxRenderer } from "safe-mdx";
 import { mdxParse } from "safe-mdx/parse";
-import type { BundledLanguage } from "shiki";
 import LiveCodeBlock from "~/components/live-code-block";
 import { Code } from "~/components/static-code-block";
 import type { MDXComponents, MdxAttributes, PostLoaderData } from "./types";
@@ -27,10 +26,11 @@ function parseMetaString(
 }
 
 export function useMdxComponent(components?: MDXComponents) {
-  const { attributes, __raw } = useLoaderData<PostLoaderData>();
+  const { attributes, __raw, highlightedBlocks } = useLoaderData<PostLoaderData>();
 
   return () => {
     const ast = mdxParse(__raw);
+    let blockIndex = 0;
 
     return (
       <SafeMdxRenderer
@@ -48,11 +48,12 @@ export function useMdxComponent(components?: MDXComponents) {
                 </div>
               );
             } else {
+              const key = `code-block-${blockIndex}`;
+              const highlightedHtml = highlightedBlocks?.[key] || `<pre><code>${node.value}</code></pre>`;
+              blockIndex++;
               return (
                 <div className="not-prose code">
-                  <Code lang={(node.lang as BundledLanguage) ?? ""}>
-                    {node.value}
-                  </Code>
+                  <Code highlightedHtml={highlightedHtml} />
                 </div>
               );
             }

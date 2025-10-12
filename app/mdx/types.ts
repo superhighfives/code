@@ -51,6 +51,7 @@ export interface MdxRuntimeData {
 export interface PostLoaderData {
   __raw: string;
   attributes: PostFrontmatter;
+  highlightedBlocks?: Record<string, string>;
 }
 
 export type MdxAttributes = {

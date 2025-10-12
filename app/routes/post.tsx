@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { mdxParse } from "safe-mdx/parse";
 import { components } from "~/components/components";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
@@ -6,6 +7,7 @@ import tags from "~/components/tags";
 import { useMdxAttributes, useMdxComponent } from "~/mdx/mdx-hooks";
 import type { PostLoaderData } from "~/mdx/types";
 import { processArticleDate } from "~/utils/posts";
+import { highlightCode } from "~/utils/shiki.server";
 import { loadMdxRuntime } from "../mdx/mdx-runtime";
 import type { Route } from "./+types/post";
 
@@ -13,9 +15,29 @@ export async function loader({
   request,
 }: Route.LoaderArgs): Promise<PostLoaderData> {
   const { content, frontmatter } = await loadMdxRuntime(request);
+  const rawContent = content as string;
+
+  // Pre-process code blocks
+  const ast = mdxParse(rawContent);
+  const highlightedBlocks: Record<string, string> = {};
+
+  // Find all code blocks and highlight them
+  let blockIndex = 0;
+  for (const node of ast.children) {
+    if (node.type === "code" && node.value) {
+      const key = `code-block-${blockIndex}`;
+      highlightedBlocks[key] = await highlightCode(
+        node.value,
+        node.lang || "text"
+      );
+      blockIndex++;
+    }
+  }
+
   return {
-    __raw: content as string,
+    __raw: rawContent,
     attributes: frontmatter,
+    highlightedBlocks,
   };
 }
 
