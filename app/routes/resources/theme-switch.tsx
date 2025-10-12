@@ -54,21 +54,9 @@ export function ThemeSwitch({
   const nextMode =
     mode === "system" ? "light" : mode === "light" ? "dark" : "system";
   const modeLabel = {
-    light: (
-      <Sun name="sun">
-        <span className="sr-only">Light</span>
-      </Sun>
-    ),
-    dark: (
-      <Moon name="moon">
-        <span className="sr-only">Dark</span>
-      </Moon>
-    ),
-    system: (
-      <Laptop name="laptop">
-        <span className="sr-only">System</span>
-      </Laptop>
-    ),
+    light: <Sun />,
+    dark: <Moon />,
+    system: <Laptop />,
   };
 
   return (

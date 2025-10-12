@@ -48,6 +48,7 @@ export function ClientHintCheck({ nonce }: { nonce: string }) {
   return (
     <script
       nonce={nonce}
+      suppressHydrationWarning
       // biome-ignore lint/security/noDangerouslySetInnerHtml: required for client hints
       dangerouslySetInnerHTML={{
         __html: hintsUtils.getClientHintCheckScript(),
