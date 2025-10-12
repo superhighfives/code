@@ -14,7 +14,6 @@ export interface ContentFile<T = Record<string, unknown>> {
 function parseFilenameParts(filename: string): {
   slug: string;
   date?: Date;
-  publishedAt?: string;
 } {
   // Check if filename matches YYYY-MM-DD.slug.mdx pattern
   const dateSlugMatch = filename.match(/^(\d{4})-(\d{2})-(\d{2})\.(.+)\.mdx?$/);
@@ -26,8 +25,7 @@ function parseFilenameParts(filename: string): {
       parseInt(month, 10) - 1,
       parseInt(day, 10),
     );
-    const publishedAt = `${year}-${month}-${day}`;
-    return { slug, date, publishedAt };
+    return { slug, date };
   }
 
   // Fallback to regular filename parsing
@@ -104,13 +102,12 @@ export function processFile(filePath: string): {
   // Extract date information from filename
   const filename =
     filePath.split("/").pop() || filePath.split("\\").pop() || "";
-  const { slug, date, publishedAt } = parseFilenameParts(filename);
+  const { slug, date } = parseFilenameParts(filename);
 
   // Merge filename data with frontmatter
   const mergedAttributes: Record<string, unknown> = {
     ...attributes,
     slug: attributes.slug || slug,
-    publishedAt: attributes.publishedAt || publishedAt,
   };
 
   // Add date if extracted from filename (don't override frontmatter date)
@@ -141,13 +138,12 @@ export async function processFileAsync(filePath: string): Promise<{
 
   // Extract date information from filename
   const filename = filePath.split("/").pop() || "";
-  const { slug, date, publishedAt } = parseFilenameParts(filename);
+  const { slug, date } = parseFilenameParts(filename);
 
   // Merge filename data with frontmatter
   const mergedAttributes: Record<string, unknown> = {
     ...attributes,
     slug: attributes.slug || slug,
-    publishedAt: attributes.publishedAt || publishedAt,
   };
 
   // Add date if extracted from filename (don't override frontmatter date)

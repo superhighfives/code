@@ -18,16 +18,14 @@ async function mdxToHtml(mdxContent: string): Promise<string> {
 export async function loader({ request }: Route.LoaderArgs) {
   const { files } = await getRuntimeMdxManifest();
 
-  // Sort posts by published date (newest first)
-  const sortedPosts = files.sort((a, b) => {
-    const dateA = a.attributes.date
-      ? new Date(a.attributes.date)
-      : new Date(a.attributes.publishedAt || "1970-01-01");
-    const dateB = b.attributes.date
-      ? new Date(b.attributes.date)
-      : new Date(b.attributes.publishedAt || "1970-01-01");
-    return dateB.getTime() - dateA.getTime();
-  });
+  // Filter out pages without dates and sort by published date (newest first)
+  const sortedPosts = files
+    .filter((file) => file.attributes.date)
+    .sort((a, b) => {
+      const dateA = new Date(a.attributes.date);
+      const dateB = new Date(b.attributes.date);
+      return dateB.getTime() - dateA.getTime();
+    });
 
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
@@ -52,11 +50,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     ${postsWithHtml
       .map(({ file, html }) => {
         const postUrl = `${baseUrl}${file.urlPath}`;
-        const date = file.attributes.date
-          ? new Date(file.attributes.date)
-          : file.attributes.publishedAt
-            ? new Date(file.attributes.publishedAt)
-            : new Date();
+        const date = new Date(file.attributes.date!);
         const pubDate = date.toUTCString();
 
         return `

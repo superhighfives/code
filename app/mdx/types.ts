@@ -23,7 +23,6 @@ export interface Post {
   urlPath: string;
   title: string;
   description?: string;
-  publishedAt?: string;
   date?: Date;
   tags?: string[];
   frontmatter: PostFrontmatter;
@@ -36,9 +35,9 @@ export interface PostFrontmatter {
   image?: boolean | string;
   data?: MetaData[];
   slug?: string;
-  publishedAt?: string;
   date?: string;
   links?: MetaData[];
+  author?: string;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: we don't know the type
