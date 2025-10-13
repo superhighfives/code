@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createRoutesStub } from "react-router";
+import { describe, expect, it, vi } from "vitest";
 import IndexRoute, { loader } from "../index";
 
 // Mock the MDX runtime
@@ -71,6 +71,7 @@ describe("Index Route", () => {
         {
           path: "/",
           Component: IndexRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);
@@ -78,7 +79,9 @@ describe("Index Route", () => {
       render(<RemixStub initialEntries={["/"]} />);
 
       await screen.findByText(/cd ~\/code.charliegleason.com/);
-      expect(screen.getByText(/cd ~\/code.charliegleason.com/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/cd ~\/code.charliegleason.com/),
+      ).toBeInTheDocument();
     });
 
     it("should render About component", async () => {
@@ -86,6 +89,7 @@ describe("Index Route", () => {
         {
           path: "/",
           Component: IndexRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);
@@ -101,6 +105,7 @@ describe("Index Route", () => {
         {
           path: "/",
           Component: IndexRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);
@@ -120,6 +125,7 @@ describe("Index Route", () => {
         {
           path: "/",
           Component: IndexRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);

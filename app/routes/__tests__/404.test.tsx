@@ -10,6 +10,7 @@ describe("404 Route", () => {
         {
           path: "/404",
           Component: NotFoundRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);
@@ -25,6 +26,7 @@ describe("404 Route", () => {
         {
           path: "/404",
           Component: NotFoundRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);
@@ -43,6 +45,7 @@ describe("404 Route", () => {
         {
           path: "/404",
           Component: NotFoundRoute,
+          HydrateFallback: () => <div>Loading...</div>,
           loader,
         },
       ]);

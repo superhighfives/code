@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { expect, afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { afterEach, expect, vi } from "vitest";
 
 // Extend Vitest matchers with jest-dom
 expect.extend({});
@@ -24,14 +24,3 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
-
-// Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  takeRecords() {
-    return [];
-  }
-  unobserve() {}
-} as any;

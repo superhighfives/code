@@ -84,12 +84,12 @@ export default function LiveCodeBlock({ code }: PreProps) {
       }}
     >
       <SandpackLayout>
-        <SandpackCodeEditor />
         <SandpackPreview
           showOpenInCodeSandbox={false}
           showRefreshButton={false}
           showOpenNewtab={false}
         />
+        <SandpackCodeEditor />
       </SandpackLayout>
     </SandpackProvider>
   );

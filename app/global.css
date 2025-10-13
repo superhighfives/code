@@ -137,7 +137,7 @@ html.dark .shiki span {
 
   /* Sandpack */
 .code .custom-wrapper {
-  @apply subpixel-antialiased;
+  @apply subpixel-antialiased -mx-12 md:-ml-12;
 }
 
 .code .custom-layout {
@@ -147,15 +147,23 @@ html.dark .shiki span {
 .code .custom-layout,
 .code .custom-editor,
 .code .custom-code-editor,
-.code .custom-preview {
+.code .custom-preview,
+.code .cm-editor {
   @apply !bg-transparent;
 }
 
 .code .custom-pre-placeholder {
-  --sp-space-5: 0;
-  @apply leading-[1.7142857];
+  @apply not-md:px-8!;
+}
+
+.code .cm-scroller > * {
+  @apply not-md:px-12;
 }
 
 .code .custom-preview {
-  @apply p-2;
+  @apply md:max-w-[300px] shadow-md border-r border-gray-200 dark:border-gray-700 bg-black;
+}
+
+.code .sp-preview-iframe {
+  @apply bg-gray-100 dark:bg-gray-900;
 }
