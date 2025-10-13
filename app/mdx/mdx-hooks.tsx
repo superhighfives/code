@@ -1,3 +1,4 @@
+import { useCallback, useMemo, useRef } from "react";
 import { useLoaderData } from "react-router";
 import { SafeMdxRenderer } from "safe-mdx";
 import { mdxParse } from "safe-mdx/parse";
@@ -29,42 +30,53 @@ export function useMdxComponent(components?: MDXComponents) {
   const { attributes, __raw, highlightedBlocks } =
     useLoaderData<PostLoaderData>();
 
-  return () => {
-    const ast = mdxParse(__raw);
-    let blockIndex = 0;
+  const blockIndexRef = useRef(0);
 
-    return (
-      <SafeMdxRenderer
-        markdown={__raw}
-        components={components}
-        mdast={ast}
-        allowClientEsmImports={true}
-        renderNode={(node) => {
-          if (node.type === "code") {
-            const meta = parseMetaString(node.meta);
-            if (meta.live) {
-              return (
-                <div className="not-prose code">
-                  <LiveCodeBlock live code={node.value} />
-                </div>
-              );
-            }
-            const key = `code-block-${blockIndex}`;
-            blockIndex++;
-            const highlightedHtml =
-              highlightedBlocks?.[key] ||
-              `<pre><code>${node.value}</code></pre>`;
-            return (
-              <div className="not-prose code">
-                <Code highlightedHtml={highlightedHtml} />
-              </div>
-            );
-          }
-        }}
-        {...attributes}
-      />
-    );
-  };
+  // Stabilize renderNode function with useCallback
+  const renderNode = useCallback(
+    (node: any) => {
+      if (node.type === "code") {
+        const meta = parseMetaString(node.meta);
+        if (meta.live) {
+          return (
+            <div className="not-prose code">
+              <LiveCodeBlock live code={node.value} />
+            </div>
+          );
+        }
+        const key = `code-block-${blockIndexRef.current}`;
+        blockIndexRef.current++;
+        const highlightedHtml =
+          highlightedBlocks?.[key] || `<pre><code>${node.value}</code></pre>`;
+        return (
+          <div className="not-prose code">
+            <Code highlightedHtml={highlightedHtml} />
+          </div>
+        );
+      }
+    },
+    [highlightedBlocks],
+  );
+
+  return useMemo(() => {
+    return () => {
+      // Reset blockIndex for each render
+      blockIndexRef.current = 0;
+
+      const ast = mdxParse(__raw);
+
+      return (
+        <SafeMdxRenderer
+          markdown={__raw}
+          components={components}
+          mdast={ast}
+          allowClientEsmImports={true}
+          renderNode={renderNode}
+          {...attributes}
+        />
+      );
+    };
+  }, [__raw, components, renderNode, attributes]);
 }
 
 export const useMdxFiles = () => {
