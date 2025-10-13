@@ -83,7 +83,7 @@ function Document({
       <body className="font-mono text-sm bg-white dark:bg-gray-950">
         {children}
         <ScrollRestoration nonce={nonce} />
-        {/* <Scripts nonce={nonce} /> */}
+        <Scripts nonce={nonce} />
       </body>
     </html>
   );
