@@ -2,9 +2,9 @@ import type { SandpackTheme } from "./types";
 
 export const mocha: SandpackTheme = {
   colors: {
-    surface1: "#1e1e2e",
-    surface2: "#313244",
-    surface3: "#45475a",
+    surface1: "#011627",
+    surface2: "#243b4c",
+    surface3: "#112331",
     clickable: "#89b4fa",
     base: "#cdd6f4",
     disabled: "#6c7086",

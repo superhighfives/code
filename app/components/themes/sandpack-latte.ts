@@ -2,9 +2,9 @@ import type { SandpackTheme } from "./types";
 
 export const latte: SandpackTheme = {
   colors: {
-    surface1: "#eff1f5",
-    surface2: "#ccd0da",
-    surface3: "#bcc0cc",
+    surface1: "#f8f9fb",
+    surface2: "#EBEDF0",
+    surface3: "#e4e7eb",
     clickable: "#1e66f5",
     base: "#4c4f69",
     disabled: "#9ca0b0",
