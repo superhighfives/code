@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router";
+import { describe, expect, it } from "vitest";
 import { About } from "../about";
 
 describe("About", () => {
@@ -8,27 +8,33 @@ describe("About", () => {
     render(
       <BrowserRouter>
         <About />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: /Hello, I'm Charlie/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Hello, I'm Charlie/i }),
+    ).toBeInTheDocument();
   });
 
   it("should render the description text", () => {
     render(
       <BrowserRouter>
         <About />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
-    expect(screen.getByText(/I'm a designer, developer, creative coder, and sometimes musician/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /I'm a designer, developer, creative coder, and sometimes musician/i,
+      ),
+    ).toBeInTheDocument();
   });
 
   it("should render a link to the about page", () => {
     render(
       <BrowserRouter>
         <About />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     const link = screen.getByRole("link", { name: /More about me/i });
@@ -40,7 +46,7 @@ describe("About", () => {
     const { container } = render(
       <BrowserRouter>
         <About />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     // Check for the Hand icon by looking for svg element

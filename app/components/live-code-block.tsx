@@ -60,7 +60,6 @@ export default function LiveCodeBlock({ code }: PreProps) {
 
   return (
     <SandpackProvider
-      key={theme}
       theme={theme === "dark" ? mocha : latte}
       files={{
         "/App.tsx": code,

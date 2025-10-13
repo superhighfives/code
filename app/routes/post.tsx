@@ -51,6 +51,11 @@ export function meta({ data }: Route.MetaArgs) {
   return tags(attributes);
 }
 
+export function shouldRevalidate({ defaultShouldRevalidate }: Route.ShouldRevalidateArgs) {
+  // Don't revalidate on theme changes - the content doesn't change
+  return false;
+}
+
 export default function Post() {
   const Component = useMdxComponent(components);
   const { title, data, links, date } = useMdxAttributes();
