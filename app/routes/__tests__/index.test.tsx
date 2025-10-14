@@ -35,6 +35,35 @@ vi.mock("~/mdx/mdx-runtime", () => ({
   ]),
 }));
 
+// Mock components
+vi.mock("~/components/about", () => ({
+  About: () => <div data-testid="about">About Component</div>,
+}));
+
+vi.mock("~/components/link-block", () => ({
+  default: ({
+    title,
+    description,
+    caption,
+    href,
+  }: {
+    title: string;
+    description?: string;
+    caption?: string;
+    href: string;
+  }) => (
+    <div data-testid="link-block">
+      <a href={href}>{title}</a>
+      {description && <p>{description}</p>}
+      {caption && <span>{caption}</span>}
+    </div>
+  ),
+}));
+
+vi.mock("~/components/tags", () => ({
+  default: vi.fn(() => []),
+}));
+
 describe("Index Route", () => {
   describe("loader", () => {
     it("should load and sort posts by date (newest first)", async () => {
