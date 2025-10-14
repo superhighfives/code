@@ -84,7 +84,10 @@ export function generateMdxManifestSync(): MdxManifest {
 
   for (const filePath of pathsFiles[0]) {
     const { attributes } = processMdxFileSync(filePath);
-    const urlPath = transformFilePathToUrlPath(filePath, resolve(process.cwd(), POSTS_PATH));
+    const urlPath = transformFilePathToUrlPath(
+      filePath,
+      resolve(process.cwd(), POSTS_PATH),
+    );
 
     // Use the slug from attributes (which includes filename parsing)
     const slug =

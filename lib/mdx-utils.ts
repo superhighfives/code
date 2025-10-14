@@ -47,7 +47,8 @@ export function transformFilePathToUrlPath(
   const { slug } = parseFilenameParts(filename);
 
   // Get the base directory name for comparison
-  const baseDirectoryName = basePath.split("/").pop() || basePath.split("\\").pop() || "";
+  const baseDirectoryName =
+    basePath.split("/").pop() || basePath.split("\\").pop() || "";
 
   // For posts, create clean URLs without the base path prefix
   if (baseDirectoryName === "posts" || alias === "posts") {
@@ -83,8 +84,10 @@ export function findMdxFiles(dir: string): string[] {
   return files;
 }
 
-function transformObjectToMetaDataArray(obj: unknown): Array<{ key: string; value: string }> | undefined {
-  if (!obj || typeof obj !== 'object') return undefined;
+function transformObjectToMetaDataArray(
+  obj: unknown,
+): Array<{ key: string; value: string }> | undefined {
+  if (!obj || typeof obj !== "object") return undefined;
 
   return Object.entries(obj).map(([key, value]) => ({
     key,
@@ -117,10 +120,14 @@ export function processFile(filePath: string): {
 
   // Transform data and links objects to MetaData arrays
   if (mergedAttributes.data) {
-    mergedAttributes.data = transformObjectToMetaDataArray(mergedAttributes.data);
+    mergedAttributes.data = transformObjectToMetaDataArray(
+      mergedAttributes.data,
+    );
   }
   if (mergedAttributes.links) {
-    mergedAttributes.links = transformObjectToMetaDataArray(mergedAttributes.links);
+    mergedAttributes.links = transformObjectToMetaDataArray(
+      mergedAttributes.links,
+    );
   }
 
   return {
@@ -153,10 +160,14 @@ export async function processFileAsync(filePath: string): Promise<{
 
   // Transform data and links objects to MetaData arrays
   if (mergedAttributes.data) {
-    mergedAttributes.data = transformObjectToMetaDataArray(mergedAttributes.data);
+    mergedAttributes.data = transformObjectToMetaDataArray(
+      mergedAttributes.data,
+    );
   }
   if (mergedAttributes.links) {
-    mergedAttributes.links = transformObjectToMetaDataArray(mergedAttributes.links);
+    mergedAttributes.links = transformObjectToMetaDataArray(
+      mergedAttributes.links,
+    );
   }
 
   return {

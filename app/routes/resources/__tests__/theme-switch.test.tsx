@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRoutesStub } from "react-router";
-import { parseWithZod } from "@conform-to/zod/v4";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod/v4";
 import { action, ThemeSwitch } from "../theme-switch";
 
@@ -121,7 +121,11 @@ describe("Theme Switch", () => {
         body: formData,
       });
 
-      const response = await action({ request, params: {}, context: {} } as any);
+      const response = await action({
+        request,
+        params: {},
+        context: {},
+      } as any);
 
       // Should return a defined response (React Router's DataWithResponseInit or redirect)
       expect(response).toBeDefined();
@@ -137,7 +141,11 @@ describe("Theme Switch", () => {
         body: formData,
       });
 
-      const response = await action({ request, params: {}, context: {} } as any);
+      const response = await action({
+        request,
+        params: {},
+        context: {},
+      } as any);
 
       expect(response).toBeDefined();
       expect(response).toHaveProperty("init");
@@ -152,7 +160,11 @@ describe("Theme Switch", () => {
         body: formData,
       });
 
-      const response = await action({ request, params: {}, context: {} } as any);
+      const response = await action({
+        request,
+        params: {},
+        context: {},
+      } as any);
 
       expect(response).toBeDefined();
       expect(response).toHaveProperty("init");
@@ -168,7 +180,11 @@ describe("Theme Switch", () => {
         body: formData,
       });
 
-      const response = await action({ request, params: {}, context: {} } as any);
+      const response = await action({
+        request,
+        params: {},
+        context: {},
+      } as any);
 
       // When redirectTo is provided, it should return a redirect response
       expect(response).toBeDefined();
@@ -185,7 +201,7 @@ describe("Theme Switch", () => {
 
       // invariantResponse throws an error for invalid themes
       await expect(
-        action({ request, params: {}, context: {} } as any)
+        action({ request, params: {}, context: {} } as any),
       ).rejects.toThrow();
     });
 
@@ -199,7 +215,7 @@ describe("Theme Switch", () => {
 
       // invariantResponse throws an error when theme is missing
       await expect(
-        action({ request, params: {}, context: {} } as any)
+        action({ request, params: {}, context: {} } as any),
       ).rejects.toThrow();
     });
   });
@@ -259,7 +275,9 @@ describe("Theme Switch", () => {
       const { container } = render(<RemixStub initialEntries={["/"]} />);
 
       const themeInput = container.querySelector('input[name="theme"]');
-      const redirectToInput = container.querySelector('input[name="redirectTo"]');
+      const redirectToInput = container.querySelector(
+        'input[name="redirectTo"]',
+      );
 
       expect(themeInput).toBeInTheDocument();
       expect(themeInput).toHaveAttribute("type", "hidden");
@@ -278,7 +296,9 @@ describe("Theme Switch", () => {
 
       const { container } = render(<RemixStub initialEntries={["/"]} />);
 
-      const themeInput = container.querySelector('input[name="theme"]') as HTMLInputElement;
+      const themeInput = container.querySelector(
+        'input[name="theme"]',
+      ) as HTMLInputElement;
 
       // Light -> Dark
       expect(themeInput.value).toBe("dark");

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import GeneralErrorBoundary from "../error-boundary";
 
 describe("GeneralErrorBoundary", () => {
@@ -37,7 +37,9 @@ describe("GeneralErrorBoundary", () => {
 
     const { container } = render(<GeneralErrorBoundary error={error} />);
 
-    expect(screen.getByText(/cd ~\/code.charliegleason.com/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/cd ~\/code.charliegleason.com/),
+    ).toBeInTheDocument();
 
     // Check for skull icon (svg element)
     const svg = container.querySelector("svg");

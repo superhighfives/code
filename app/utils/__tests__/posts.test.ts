@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { processArticleDate } from "../posts";
 
 describe("processArticleDate", () => {
@@ -11,20 +11,18 @@ describe("processArticleDate", () => {
 
   it("should format date correctly and add to metadata", () => {
     const testDate = "2024-01-15";
-    const existingMetadata = [
-      { key: "Author", value: "Charlie" }
-    ];
+    const existingMetadata = [{ key: "Author", value: "Charlie" }];
 
     const result = processArticleDate(existingMetadata, testDate);
 
     expect(result.metadata).toHaveLength(2);
     expect(result.metadata[0]).toEqual({
       key: "Last Updated",
-      value: "15/01/2024"
+      value: "15/01/2024",
     });
     expect(result.metadata[1]).toEqual({
       key: "Author",
-      value: "Charlie"
+      value: "Charlie",
     });
   });
 
@@ -41,7 +39,7 @@ describe("processArticleDate", () => {
     // Create a date that's definitely less than 3 months ago
     const recentDate = new Date();
     recentDate.setMonth(recentDate.getMonth() - 1); // 1 month ago
-    const dateString = recentDate.toISOString().split('T')[0];
+    const dateString = recentDate.toISOString().split("T")[0];
 
     const result = processArticleDate([], dateString);
 
@@ -53,7 +51,7 @@ describe("processArticleDate", () => {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     threeMonthsAgo.setDate(threeMonthsAgo.getDate() - 1);
-    const dateString = threeMonthsAgo.toISOString().split('T')[0];
+    const dateString = threeMonthsAgo.toISOString().split("T")[0];
 
     const result = processArticleDate([], dateString);
 

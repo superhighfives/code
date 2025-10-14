@@ -14,7 +14,12 @@
     "composite": true,
     "strict": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "@cloudflare/workers-types", "vite/client", "vitest/globals"],
+    "types": [
+      "node",
+      "@cloudflare/workers-types",
+      "vite/client",
+      "vitest/globals"
+    ],
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "bundler",

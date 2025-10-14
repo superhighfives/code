@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getDomainUrl } from "../misc";
 
 describe("getDomainUrl", () => {
@@ -6,8 +6,8 @@ describe("getDomainUrl", () => {
     const request = new Request("http://example.com", {
       headers: {
         "X-Forwarded-Host": "forwarded-host.com",
-        "X-Forwarded-Proto": "https"
-      }
+        "X-Forwarded-Proto": "https",
+      },
     });
 
     const result = getDomainUrl(request);
@@ -39,14 +39,14 @@ describe("getDomainUrl", () => {
     const result = getDomainUrl(request);
 
     // Should extract just the origin (protocol + host)
-    expect(result).toMatch(/^https?:\/\/[^\/]+$/);
+    expect(result).toMatch(/^https?:\/\/[^/]+$/);
   });
 
   it("should respect X-Forwarded-Proto for protocol", () => {
     const request = new Request("http://example.com", {
       headers: {
-        "X-Forwarded-Proto": "https"
-      }
+        "X-Forwarded-Proto": "https",
+      },
     });
 
     const result = getDomainUrl(request);

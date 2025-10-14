@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createRoutesStub } from "react-router";
+import { describe, expect, it, vi } from "vitest";
 import NotFoundRoute, { loader } from "../404";
 
 describe("404 Route", () => {
@@ -53,7 +53,9 @@ describe("404 Route", () => {
       render(<RemixStub initialEntries={["/404"]} />);
 
       await screen.findByText(/cd ~\/code.charliegleason.com/);
-      expect(screen.getByText(/cd ~\/code.charliegleason.com/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/cd ~\/code.charliegleason.com/),
+      ).toBeInTheDocument();
     });
   });
 });
