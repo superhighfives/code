@@ -1,17 +1,12 @@
 import { HandMetal } from "lucide-react";
 import type { MDXComponents } from "~/mdx/types";
-import Picture from "../components/picture";
-import Visual from "../components/visual";
-import CodeBlock from "./live-code-block";
+import InlineCode from "../inline-code";
+import CodeBlock from "../live-code-block";
+import Picture from "../picture";
+import Visual from "../visual";
 
 export const components: MDXComponents = {
-  code: ({ children }: { children: React.ReactNode }) => {
-    return (
-      <code className="mx-0.5 rounded-xs bg-gray-200 dark:bg-gray-800 ring-2 ring-gray-200 dark:ring-gray-800">
-        {children}
-      </code>
-    );
-  },
+  code: InlineCode,
   CodeBlock,
   Picture,
   Visual,

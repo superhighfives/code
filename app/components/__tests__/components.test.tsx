@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { components } from "../components";
+import { components } from "../utils/components";
 
 // Mock YouTube component to prevent iframe fetch warnings in tests
 // We use data-src instead of src to prevent happy-dom from trying to fetch

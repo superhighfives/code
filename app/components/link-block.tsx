@@ -36,7 +36,7 @@ export default function LinkBlock({
         <div className="ml-4 shrink-0">
           <span className="font-medium text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300 flex gap-2 items-center">
             <span className="max-sm:hidden">{action}</span>
-            <span className="items-center gap-2">
+            <span>
               {action === "Open" ? <ExternalLink size={16} /> : <span>❯</span>}
             </span>
           </span>

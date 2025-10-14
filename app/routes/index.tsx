@@ -3,7 +3,7 @@ import type { MetaFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import { About } from "~/components/about";
 import LinkBlock from "~/components/link-block";
-import tags from "~/components/tags";
+import tags from "~/components/utils/tags";
 import { loadAllMdxRuntime } from "~/mdx/mdx-runtime";
 import type { Post } from "~/mdx/types";
 

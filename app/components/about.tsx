@@ -15,10 +15,10 @@ export function About() {
           I'm a designer, developer, creative coder, and sometimes musician. I
           write about design and development.{" "}
           <Link
-            className="font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+            className="inline-flex items-center gap-1 font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
             to="/about"
           >
-            More about me.
+            <span>More about me</span> ❯
           </Link>
         </p>
       </div>
