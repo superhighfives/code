@@ -31,7 +31,6 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   overscroll-behavior-x: none;
-  font-family: monospace;
   margin: 0 -1px;
 }
 
