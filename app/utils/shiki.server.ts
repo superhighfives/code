@@ -4,16 +4,19 @@ import json from "@shikijs/langs/json";
 import jsx from "@shikijs/langs/jsx";
 import tsx from "@shikijs/langs/tsx";
 import typescript from "@shikijs/langs/typescript";
-import catppuccinLatte from "@shikijs/themes/catppuccin-latte";
-import catppuccinMocha from "@shikijs/themes/catppuccin-mocha";
 import {
   createHighlighterCore,
   createOnigurumaEngine,
   type HighlighterCore,
   loadWasm,
 } from "shiki";
+import { latte, mocha } from "~/components/themes/definitions";
+import { toShiki } from "~/components/themes/utils";
 // @ts-expect-error: wasm is untyped in Vite
 import ONIG_WASM from "../vendor/onig.wasm";
+
+const latteTheme = toShiki(latte, "catppuccin-latte", "light");
+const mochaTheme = toShiki(mocha, "catppuccin-mocha", "dark");
 
 let highlighterPromise: Promise<HighlighterCore> | null = null;
 
@@ -22,7 +25,7 @@ async function getHighlighter(): Promise<HighlighterCore> {
     highlighterPromise = (async () => {
       await loadWasm(ONIG_WASM);
       return await createHighlighterCore({
-        themes: [catppuccinLatte, catppuccinMocha],
+        themes: [latteTheme, mochaTheme],
         langs: [bash, javascript, json, jsx, tsx, typescript],
         engine: createOnigurumaEngine(),
       });
