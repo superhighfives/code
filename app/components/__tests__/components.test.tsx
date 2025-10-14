@@ -38,7 +38,7 @@ describe("MDX Components", () => {
       const { container } = render(<CodeComponent>test</CodeComponent>);
       const codeElement = container.querySelector("code");
 
-      expect(codeElement).toHaveClass("mx-0.5");
+      expect(codeElement).toHaveClass("px-0.5");
       expect(codeElement).toHaveClass("rounded-xs");
     });
   });
