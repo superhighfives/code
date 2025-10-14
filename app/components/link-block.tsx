@@ -22,12 +22,12 @@ export default function LinkBlock({
     >
       <div className="flex items-center justify-between leading-6">
         <div className="flex w-0 flex-1 items-center">
-          <div className="flex min-w-0 flex-1 gap-4 items-center">
+          <div className="flex min-w-0 flex-1 gap-4 items-center justify-between">
             <span className="truncate font-medium dark:text-gray-200">
               {title}
             </span>
             {caption ? (
-              <span className="shrink-0 text-gray-400 dark:text-gray-500 text-xs">
+              <span className="shrink-0 text-gray-400 dark:text-gray-500 text-xs font-sans">
                 {caption}
               </span>
             ) : null}
@@ -35,10 +35,8 @@ export default function LinkBlock({
         </div>
         <div className="ml-4 shrink-0">
           <span className="font-medium text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300 flex gap-2 items-center">
-            <span className="max-sm:hidden">{action}</span>
-            <span>
-              {action === "Open" ? <ExternalLink size={16} /> : <span>❯</span>}
-            </span>
+            <span className="max-sm:hidden text-xs">{action}</span>
+            {action === "Open" ? <ExternalLink size={16} /> : <span>❯</span>}
           </span>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import {
+  getSandpackCssText,
   SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
@@ -7,8 +8,7 @@ import {
 } from "@codesandbox/sandpack-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "~/routes/resources/theme-switch";
-import { latte } from "./themes/sandpack-latte";
-import { mocha } from "./themes/sandpack-mocha";
+import { sandpackLatte, sandpackMocha } from "./themes";
 
 interface PreProps {
   live?: boolean;
@@ -88,7 +88,7 @@ export default function LiveCodeBlock({ code }: PreProps) {
 
   return (
     <SandpackProvider
-      theme={theme === "dark" ? mocha : latte}
+      theme={theme === "dark" ? sandpackMocha : sandpackLatte}
       files={{
         "/App.tsx": currentCode,
         "/styles.css": { code: css, hidden: true },
@@ -110,6 +110,7 @@ export default function LiveCodeBlock({ code }: PreProps) {
         dependencies,
       }}
     >
+      <style>{getSandpackCssText()}</style>
       <Sandpack onCodeChange={setCurrentCode} />
     </SandpackProvider>
   );

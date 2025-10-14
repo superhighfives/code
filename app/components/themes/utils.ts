@@ -55,7 +55,7 @@ interface ShikiTokenColor {
   };
 }
 
-interface ShikiTheme {
+export interface ShikiTheme {
   name: string;
   type: "light" | "dark";
   colors: Record<string, string>;
@@ -101,7 +101,11 @@ export function toShiki(
         },
       },
       {
-        scope: ["entity.name.tag", "meta.tag.sgml", "markup.deleted.git_gutter"],
+        scope: [
+          "entity.name.tag",
+          "meta.tag.sgml",
+          "markup.deleted.git_gutter",
+        ],
         settings: {
           foreground: theme.syntax.tag,
         },
