@@ -3,7 +3,17 @@ import { remark } from "remark";
 import remarkMdx from "remark-mdx";
 import remarkRehype from "remark-rehype";
 import { getRuntimeMdxManifest } from "~/mdx/mdx-runtime";
+import type { MdxFile } from "~/mdx/types";
 import type { Route } from "./+types/rss";
+
+// Type predicate to narrow MdxFile to files with valid dates
+function hasDate(
+  file: MdxFile,
+): file is MdxFile & { attributes: { date: string } } {
+  if (typeof file.attributes.date !== "string") return false;
+  const date = new Date(file.attributes.date);
+  return !Number.isNaN(date.getTime());
+}
 
 async function mdxToHtml(mdxContent: string): Promise<string> {
   const result = await remark()
@@ -19,14 +29,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   const { files } = await getRuntimeMdxManifest();
 
   // Filter out pages without dates and sort by published date (newest first)
-  const sortedPosts = files
-    .filter((file) => file.attributes.date)
-    .sort((a, b) => {
-      if (!a.attributes.date || !b.attributes.date) return 0;
-      const dateA = new Date(a.attributes.date);
-      const dateB = new Date(b.attributes.date);
-      return dateB.getTime() - dateA.getTime();
-    });
+  const sortedPosts = files.filter(hasDate).sort((a, b) => {
+    const dateA = new Date(a.attributes.date);
+    const dateB = new Date(b.attributes.date);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
@@ -51,7 +58,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     ${postsWithHtml
       .map(({ file, html }) => {
         const postUrl = `${baseUrl}${file.urlPath}`;
-        const date = new Date(file.attributes.date!);
+        const date = new Date(file.attributes.date);
         const pubDate = date.toUTCString();
 
         return `
@@ -60,7 +67,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       <description>${escapeXml(file.attributes.description || "")}</description>
       <link>${postUrl}</link>
       <guid isPermaLink="true">${postUrl}</guid>
-      <pubDate>${pubDate}</pubDate>
+      ${pubDate ? `<pubDate>${pubDate}</pubDate>` : ""}
       ${file.attributes.author ? `<author>${escapeXml(file.attributes.author)}</author>` : ""}
       <content:encoded><![CDATA[${html}]]></content:encoded>
     </item>`;

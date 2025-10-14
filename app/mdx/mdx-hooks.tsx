@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
 import { useLoaderData } from "react-router";
-import { SafeMdxRenderer } from "safe-mdx";
+import { type MyRootContent, SafeMdxRenderer } from "safe-mdx";
 import { mdxParse } from "safe-mdx/parse";
 import LiveCodeBlock from "~/components/live-code-block";
 import { Code } from "~/components/static-code-block";
@@ -32,9 +32,8 @@ export function useMdxComponent(components?: MDXComponents) {
 
   const blockIndexRef = useRef(0);
 
-  // Stabilize renderNode function with useCallback
   const renderNode = useCallback(
-    (node: any) => {
+    (node: MyRootContent) => {
       if (node.type === "code") {
         const meta = parseMetaString(node.meta);
         if (meta.live) {

@@ -1,9 +1,9 @@
 import { parseWithZod } from "@conform-to/zod/v4";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render } from "@testing-library/react";
 import { createRoutesStub } from "react-router";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod/v4";
+import type { Route } from "../+types/theme-switch";
 import { action, ThemeSwitch } from "../theme-switch";
 
 // Mock the utilities
@@ -125,7 +125,7 @@ describe("Theme Switch", () => {
         request,
         params: {},
         context: {},
-      } as any);
+      } as Route.ActionArgs);
 
       // Should return a defined response (React Router's DataWithResponseInit or redirect)
       expect(response).toBeDefined();
@@ -145,7 +145,7 @@ describe("Theme Switch", () => {
         request,
         params: {},
         context: {},
-      } as any);
+      } as Route.ActionArgs);
 
       expect(response).toBeDefined();
       expect(response).toHaveProperty("init");
@@ -164,7 +164,7 @@ describe("Theme Switch", () => {
         request,
         params: {},
         context: {},
-      } as any);
+      } as Route.ActionArgs);
 
       expect(response).toBeDefined();
       expect(response).toHaveProperty("init");
@@ -184,7 +184,7 @@ describe("Theme Switch", () => {
         request,
         params: {},
         context: {},
-      } as any);
+      } as Route.ActionArgs);
 
       // When redirectTo is provided, it should return a redirect response
       expect(response).toBeDefined();
@@ -201,7 +201,7 @@ describe("Theme Switch", () => {
 
       // invariantResponse throws an error for invalid themes
       await expect(
-        action({ request, params: {}, context: {} } as any),
+        action({ request, params: {}, context: {} } as Route.ActionArgs),
       ).rejects.toThrow();
     });
 
@@ -215,7 +215,7 @@ describe("Theme Switch", () => {
 
       // invariantResponse throws an error when theme is missing
       await expect(
-        action({ request, params: {}, context: {} } as any),
+        action({ request, params: {}, context: {} } as Route.ActionArgs),
       ).rejects.toThrow();
     });
   });
@@ -254,7 +254,7 @@ describe("Theme Switch", () => {
       const RemixStub = createRoutesStub([
         {
           path: "/",
-          Component: () => <ThemeSwitch userPreference="system" />,
+          Component: () => <ThemeSwitch userPreference={null} />,
         },
       ]);
 

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { createRoutesStub } from "react-router";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import NotFoundRoute, { loader } from "../404";
 
 describe("404 Route", () => {
