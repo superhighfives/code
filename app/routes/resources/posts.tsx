@@ -16,7 +16,7 @@ export async function loader() {
   // Map to JSON-friendly format
   const postsData = sortedPosts.slice(0, 10).map((post) => ({
     slug: post.slug,
-    url: post.urlPath,
+    url: `https://code.charliegleason.com/${post.urlPath}`,
     title: post.title,
     description: post.description,
     date: post.date?.toISOString(),
