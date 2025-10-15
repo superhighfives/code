@@ -1,46 +1,34 @@
-# Welcome to React Router + Cloudflare Workers!
+# code.charliegleason.com
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-starter-template)
+This is a little code blog, built with React Router 7 and deployed on Cloudflare Workers. I wanted a fast, flexible, themable setup where I could write in MDX and include live, editable code examples in the posts.
 
-![React Router Starter Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/bfdc2f85-e5c9-4c92-128b-3a6711249800/public)
+## What it does
 
-<!-- dash-content-start -->
+- 🚀 **React Router 7** for server-side rendering and routing
+- 📝 **MDX content** with live, editable code examples powered by Sandpack
+- 🎨 **Syntax highlighting** using Shiki with Catppuccin Latte and Mocha themes
+- 📡 **RSS feed** for people who use feed readers
+- 🌓 **Dark and light themes** that respect your system preferences
+- 🖼️ **OG image generation** with Satori for social media previews
+- 🤓 **WASM powered** for syntax highlighting and image generation
 
-A modern, production-ready template for building full-stack React applications using [React Router](https://reactrouter.com/) and the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/).
+## How it works
 
-## Features
+It is built with [React Router 7](https://reactrouter.com/) and deployed on [Cloudflare Workers](https://workers.cloudflare.com/). Content is written in MDX. Code blocks are syntax-highlighted on the server using [Shiki](https://shiki.style/) with [Catppuccin themes](https://github.com/catppuccin/catppuccin) that match the site's light and dark modes. Interactive code blocks use [Sandpack](https://sandpack.codesandbox.io/) to provide a full in-browser editing experience with live preview. Open Graph images are generated dynamically using [Satori](https://github.com/vercel/satori), which renders React components to SVG. All of it is powered by wasm under the hood.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-- 🔎 Built-in Observability to monitor your Worker
-<!-- dash-content-end -->
+## Running it locally
 
-## Getting Started
+Prerequisites:
+- Node.js 18 or later
+- npm
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/react-router-starter-template
-```
-
-A live public deployment of this template is available at [https://react-router-starter-template.templates.workers.dev](https://react-router-starter-template.templates.workers.dev)
-
-### Installation
-
-Install the dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
+Start the development server:
 
 ```bash
 npm run dev
@@ -48,117 +36,28 @@ npm run dev
 
 Your application will be available at `http://localhost:5173`.
 
-## Typegen
+Run tests:
 
-Generate types for your Cloudflare bindings in `wrangler.json`:
-
-```sh
-npm run typegen
+```bash
+npm test
 ```
 
-## Building for Production
+## Deployment
 
-Create a production build:
+Build for production:
 
 ```bash
 npm run build
 ```
 
-## Previewing the Production Build
-
-Preview the production build locally:
+Deploy to Cloudflare Workers:
 
 ```bash
-npm run preview
-```
-
-## Deployment
-
-If you don't have a Cloudflare account, [create one here](https://dash.cloudflare.com/sign-up)! Go to your [Workers dashboard](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fworkers-and-pages) to see your [free custom Cloudflare Workers subdomain](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/) on `*.workers.dev`.
-
-Once that's done, you can build your app:
-
-```sh
-npm run build
-```
-
-And deploy it:
-
-```sh
 npm run deploy
 ```
 
-To deploy a preview URL:
+Generate types for Cloudflare bindings:
 
-```sh
-npx wrangler versions upload
-```
-
-You can then promote a version to production after verification or roll it out progressively.
-
-```sh
-npx wrangler versions deploy
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
-
----
-
-# ❯ code.charliegleason.com
-
-📖 See the [Remix docs](https://remix.run/docs) and the [Remix Vite docs](https://remix.run/docs/en/main/guides/vite) for details on supported features.
-
-## og:image with Satori
-
-Uses [vite-plugin-wasm-module-workers](https://github.com/superhighfives/vite-plugin-wasm-module-workers/) to handle `og:image` generation on Vite and Cloudflare Workers.
-
-## Typegen
-
-Generate types for your Cloudflare bindings in `wrangler.toml`:
-
-```sh
+```bash
 npm run typegen
 ```
-
-You will need to rerun typegen whenever you make changes to `wrangler.toml`.
-
-## Development
-
-Run the Vite dev server:
-
-```sh
-npm run dev
-```
-
-To run Wrangler:
-
-```sh
-npm run build
-npm run start
-```
-
-## Deployment
-
-> [!WARNING]  
-> Cloudflare does _not_ use `wrangler.toml` to configure deployment bindings.
-> You **MUST** [configure deployment bindings manually in the Cloudflare dashboard][bindings].
-
-First, build your app for production:
-
-```sh
-npm run build
-```
-
-Then, deploy your app to Cloudflare Pages:
-
-```sh
-npm run deploy
-```
-
-[bindings]: https://developers.cloudflare.com/pages/functions/bindings/
