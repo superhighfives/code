@@ -14,5 +14,11 @@
   "assets": {
     "directory": "./public/",
     "binding": "ASSETS"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "code.charliegleason.com",
+      "custom_domain": true
+    }
+  ]
 }
