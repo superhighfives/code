@@ -3,7 +3,7 @@ import { glob, globSync } from "glob";
 import {
   processFile,
   processFileAsync,
-  transformFilePathToUrlPath,
+  transformFilePathToUrl,
 } from "../../lib/mdx-utils";
 import type { MdxFile, MdxManifest, PostFrontmatter } from "./types";
 
@@ -50,7 +50,7 @@ export async function generateMdxManifest(): Promise<MdxManifest> {
 
   for (const filePath of pathsFiles[0]) {
     const { attributes, rawContent } = await processMdxFile(filePath);
-    const urlPath = transformFilePathToUrlPath(
+    const url = transformFilePathToUrl(
       filePath,
       resolve(process.cwd(), POSTS_PATH),
     );
@@ -65,7 +65,7 @@ export async function generateMdxManifest(): Promise<MdxManifest> {
     files.push({
       path: filePath,
       slug,
-      urlPath,
+      url,
       attributes,
       rawContent,
     });
@@ -84,7 +84,7 @@ export function generateMdxManifestSync(): MdxManifest {
 
   for (const filePath of pathsFiles[0]) {
     const { attributes } = processMdxFileSync(filePath);
-    const urlPath = transformFilePathToUrlPath(
+    const url = transformFilePathToUrl(
       filePath,
       resolve(process.cwd(), POSTS_PATH),
     );
@@ -99,7 +99,7 @@ export function generateMdxManifestSync(): MdxManifest {
     files.push({
       path: filePath,
       slug,
-      urlPath,
+      url,
       attributes,
       rawContent: "", // Will be loaded when needed
     });
@@ -113,13 +113,13 @@ export async function getMdxFileByUrl(
 ): Promise<MdxFile | undefined> {
   const manifest = await generateMdxManifest();
   return manifest.files.find(
-    (file) => file.urlPath === url || file.urlPath === url.replace(/\/$/, ""),
+    (file) => file.url === url || file.url === url.replace(/\/$/, ""),
   );
 }
 
 export function getMdxFileByUrlSync(url: string): MdxFile | undefined {
   const manifest = generateMdxManifestSync();
   return manifest.files.find(
-    (file) => file.urlPath === url || file.urlPath === url.replace(/\/$/, ""),
+    (file) => file.url === url || file.url === url.replace(/\/$/, ""),
   );
 }

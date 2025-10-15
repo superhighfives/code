@@ -45,7 +45,7 @@ export default function Index() {
                   title={post.title}
                   description={post.description}
                   caption={dateCaption}
-                  href={post.urlPath}
+                  href={post.url}
                 />
               );
             })

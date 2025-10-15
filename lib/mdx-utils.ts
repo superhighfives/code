@@ -6,7 +6,7 @@ import matter from "gray-matter";
 export interface ContentFile<T = Record<string, unknown>> {
   path: string;
   slug: string;
-  urlPath: string;
+  url: string;
   attributes: T;
   rawContent: string;
 }
@@ -33,7 +33,7 @@ function parseFilenameParts(filename: string): {
   return { slug };
 }
 
-export function transformFilePathToUrlPath(
+export function transformFilePathToUrl(
   filePath: string,
   basePath: string,
   alias?: string,
@@ -211,7 +211,7 @@ export function generateManifest(
         addWatchFile?.(filePath);
 
         const { attributes, rawContent } = processFile(filePath);
-        const urlPath = transformFilePathToUrlPath(filePath, basePath);
+        const url = transformFilePathToUrl(filePath, basePath);
 
         // Use the slug from attributes (which includes filename parsing)
         const slug = `${
@@ -226,7 +226,7 @@ export function generateManifest(
         manifest.files.push({
           path: filePath,
           slug,
-          urlPath,
+          url,
           attributes,
           rawContent,
         });

@@ -14,7 +14,7 @@ export async function loadMdxRuntime(
   const { files } = await getRuntimeMdxManifest();
   const mdxFile = files.find(
     (file) =>
-      file.urlPath === pathname || file.urlPath === pathname.replace(/\/$/, ""),
+      file.url === pathname || file.url === pathname.replace(/\/$/, ""),
   );
 
   if (!mdxFile) {
@@ -36,7 +36,7 @@ export async function loadAllMdxRuntime(
 
   if (filterByPaths && filterByPaths.length > 0) {
     filteredFiles = files.filter((file) =>
-      filterByPaths.some((path) => file.urlPath.startsWith(`/${path}/`)),
+      filterByPaths.some((path) => file.url.startsWith(`/${path}/`)),
     );
   }
 
@@ -47,7 +47,7 @@ export async function loadAllMdxRuntime(
     return {
       path: file.path,
       slug: file.slug,
-      urlPath: file.urlPath,
+      url: file.url,
       title: attributes.title || "Untitled",
       description: attributes.description,
       date,

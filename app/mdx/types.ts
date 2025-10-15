@@ -8,7 +8,7 @@ export interface MdxOptions {
 export interface MdxFile {
   path: string;
   slug: string;
-  urlPath: string;
+  url: string;
   attributes: PostFrontmatter;
   rawContent: string;
 }
@@ -20,7 +20,7 @@ export interface MdxManifest {
 export interface Post {
   slug: string;
   path: string;
-  urlPath: string;
+  url: string;
   title: string;
   description?: string;
   date?: Date;
