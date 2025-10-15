@@ -14,7 +14,9 @@ This is a little code blog, built with React Router 7 and deployed on Cloudflare
 
 ## How it works
 
-It is built with [React Router 7](https://reactrouter.com/) and deployed on [Cloudflare Workers](https://workers.cloudflare.com/). Content is written in MDX. Code blocks are syntax-highlighted on the server using [Shiki](https://shiki.style/) with [Catppuccin themes](https://github.com/catppuccin/catppuccin) that match the site's light and dark modes. Interactive code blocks use [Sandpack](https://sandpack.codesandbox.io/) to provide a full in-browser editing experience with live preview. Open Graph images are generated dynamically using [Satori](https://github.com/vercel/satori), which renders React components to SVG. All of it is powered by wasm under the hood.
+It is built with [React Router 7](https://reactrouter.com/) and deployed on [Cloudflare Workers](https://workers.cloudflare.com/).
+
+Content is written in MDX. Code blocks are syntax-highlighted on the server using [Shiki](https://shiki.style/) with [Catppuccin themes](https://github.com/catppuccin/catppuccin). Interactive code blocks use [Sandpack](https://sandpack.codesandbox.io/) to provide a full in-browser editing experience with live preview. Open Graph images are generated dynamically using [Satori](https://github.com/vercel/satori), which renders React components to SVG.
 
 ## Running it locally
 
