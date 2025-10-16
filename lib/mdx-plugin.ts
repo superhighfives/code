@@ -96,10 +96,7 @@ export const mdxRoutes = [];`;
 
         return `import { route } from "@react-router/dev/routes";
 export const mdxRoutes = [${routes
-          .map(
-            (r) =>
-              `route("${r.url}", "routes/post.tsx", { id: "${r.id}" })`,
-          )
+          .map((r) => `route("${r.url}", "routes/post.tsx", { id: "${r.id}" })`)
           .join(",\n  ")}];`;
       }
     },

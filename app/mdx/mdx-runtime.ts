@@ -13,8 +13,7 @@ export async function loadMdxRuntime(
 
   const { files } = await getRuntimeMdxManifest();
   const mdxFile = files.find(
-    (file) =>
-      file.url === pathname || file.url === pathname.replace(/\/$/, ""),
+    (file) => file.url === pathname || file.url === pathname.replace(/\/$/, ""),
   );
 
   if (!mdxFile) {
