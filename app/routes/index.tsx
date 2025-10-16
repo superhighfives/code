@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { differenceInMonths, formatDistanceToNow } from "date-fns";
 import type { MetaFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import { About } from "~/components/about";
@@ -36,9 +36,10 @@ export default function Index() {
         <div className="rounded-md overflow-hidden shadow-sm divide-y divide-gray-100 dark:divide-gray-900 border border-gray-200 dark:border-gray-800">
           {posts.length ? (
             posts.map((post) => {
-              const dateCaption = post.date
-                ? `${formatDistanceToNow(post.date)} ago`
-                : null;
+              const dateCaption =
+                post.date && differenceInMonths(new Date(), post.date) <= 3
+                  ? `${formatDistanceToNow(post.date)} ago`
+                  : null;
               return (
                 <LinkBlock
                   key={post.slug}
