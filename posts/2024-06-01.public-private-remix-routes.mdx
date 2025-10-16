@@ -127,8 +127,7 @@ Use the following settings:
 npm --prefix node_modules/REPO_NAME run build && ln -s node_modules/REPO_NAME/functions functions
 </div>
 
-> [!NOTE]  
-> You'll need to update the REPO_NAME with the name of your repo. In the example screenshot, the repo is `charliegleason.com`.
+You'll need to update the REPO_NAME with the name of your repo. In the example screenshot, the repo is `charliegleason.com`.
 
 This will build your public repo on Cloudflare, and create a symbolic link of your functions directory to the root, where Cloudflare expects it.
 
@@ -137,9 +136,6 @@ This will build your public repo on Cloudflare, and create a symbolic link of yo
 <div className="border px-4 rounded-lg bg-gray-100 dark:bg-gray-900 dark:border-gray-700 mt-4">
 node_modules/REPO_NAME/public
 </div>
-
-> [!NOTE]  
-> Again, update the repo name.
 
 On deploy, Cloudflare will run the `postinstall` script inside your `package.json`, handling the syncing of assets and routes you defined earlier. It'll then build the public repo with the private assets and routes.
 
