@@ -58,11 +58,120 @@ html.dark .shiki span {
 }
 
 /*************************************************************/
+/* Markdown alerts */
+/*************************************************************/
+
+:root {
+  --github-alert-default-color: var(--color-gray-500);
+  --github-alert-note-color: var(--color-blue-500);
+  --github-alert-tip-color: var(--color-green-500);
+  --github-alert-important-color: var(--color-indigo-500);
+  --github-alert-warning-color: var(--color-yellow-500);
+  --github-alert-caution-color: var(--color-red-500);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --github-alert-default-color: var(--color-gray-500);
+    --github-alert-note-color: var(--color-blue-500);
+    --github-alert-tip-color: var(--color-green-500);
+    --github-alert-important-color: var(--color-indigo-500);
+    --github-alert-warning-color: var(--color-yellow-500);
+    --github-alert-caution-color: var(--color-red-500);
+  }
+}
+
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  border-left: 0.25em solid var(--github-alert-default-color);
+}
+
+.markdown-alert .octicon {
+  display: inline-block;
+  fill: currentColor;
+}
+
+.markdown-alert > :first-child {
+  margin-top: 0;
+}
+
+.markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-alert > * {
+  margin: 0;
+}
+
+.markdown-alert-note {
+  border-left-color: var(--github-alert-note-color);
+  background-color: color-mix(in srgb, var(--github-alert-note-color) 10%, transparent);
+}
+
+.markdown-alert-tip {
+  border-left-color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important {
+  border-left-color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning {
+  border-left-color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution {
+  border-left-color: var(--github-alert-caution-color);
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+}
+
+.markdown-alert-title > svg {
+  margin-right: 0.5rem;
+}
+
+.markdown-alert-note .markdown-alert-title {
+  color: var(--github-alert-note-color);
+}
+
+.markdown-alert-tip .markdown-alert-title {
+  color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important .markdown-alert-title {
+  color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning .markdown-alert-title {
+  color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution .markdown-alert-title {
+  color: var(--github-alert-caution-color);
+}
+
+/*************************************************************/
 /* Post styles */
 /*************************************************************/
 
 .post {
   @apply prose [&>*:not(.code)]:max-w-[60ch] prose-headings:text-sm prose-sm dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-300 prose-a:underline prose-a:hover:underline prose-a:decoration-indigo-200 dark:prose-a:decoration-indigo-900 prose-a:hover:decoration-current prose-a:underline-offset-4 sm:px-4 border border-transparent max-w-none prose-h1:before:content-['#'] prose-h2:before:content-['##'] prose-h3:before:content-['###'] prose-h4:before:content-['####'] prose-h5:before:content-['#####'] prose-h6:before:content-['######'] prose-headings:before:mr-2 prose-headings:before:tracking-widest prose-headings:before:text-indigo-400 prose-h1:border-b-2 prose-h2:border-b prose-h1:border-indigo-500 prose-h2:border-indigo-500 prose-h2:pb-4 prose-h2:mb-4 prose-h1:mt-16 prose-h2:mt-12 prose-h3:mt-8 prose-h4:mt-4 prose-h5:mt-2 prose-h6:mt-2 prose-a:text-wrap prose-a:break-words prose-a:[word-break:break-word] [&>:first-child]:mt-0 [&>:last-child]:mb-0 text-pretty;
+}
+
+@utility prose {
+  blockquote {
+    /* Disable adding quote marks to block-quotes: https://github.com/tailwindlabs/tailwindcss-typography/issues/66 */
+    p {
+        &:first-of-type::before,
+        &:last-of-type::after {
+            content: none;
+        }
+    }
+  }
 }
 
 /*************************************************************/
@@ -107,4 +216,12 @@ html.dark .shiki span {
 
 .code .sp-preview-iframe {
   @apply bg-gray-100 dark:bg-gray-900;
+}
+
+/*************************************************************/
+/* Command styles */
+/*************************************************************/
+
+.command + .markdown-alert {
+  @apply -mt-2 pt-4;
 }

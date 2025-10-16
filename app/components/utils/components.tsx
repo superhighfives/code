@@ -1,5 +1,6 @@
 import { HandMetal } from "lucide-react";
 import type { MDXComponents } from "~/mdx/types";
+import Command from "../command";
 import InlineCode from "../inline-code";
 import CodeBlock from "../live-code-block";
 import Picture from "../picture";
@@ -8,6 +9,7 @@ import Visual from "../visual";
 export const components: MDXComponents = {
   code: InlineCode,
   CodeBlock,
+  Command,
   Picture,
   Visual,
   HandMetal,

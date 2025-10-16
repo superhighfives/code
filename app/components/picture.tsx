@@ -1,3 +1,5 @@
+import { useTheme } from "~/routes/resources/theme-switch";
+
 export default function Picture({
   src,
   themed = false,
@@ -7,13 +9,13 @@ export default function Picture({
   themed: boolean;
   alt: string;
 }) {
-  const theme = "dark";
+  const theme = useTheme();
   const baseImage = `${src}`;
   const darkImage = `${baseImage.split(".").join("-dark.")}`;
 
   return (
     <picture
-      className={`overflow-hidden rounded shadow-xl w-full align-top my-0`}
+      className={`overflow-hidden rounded shadow-sm w-full align-top my-0`}
     >
       {theme === "dark" && themed ? <source srcSet={darkImage} /> : null}
       <img src={baseImage} className="w-full" alt={alt} />

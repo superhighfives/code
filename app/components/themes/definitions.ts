@@ -61,7 +61,7 @@ export const latte: ThemeDefinition = {
     definition: "#ea76cb",
     property: "#df8e1d",
     static: "#fe640b",
-    string: "#40a02b",
+    string: "#40c223",
   },
   font: {
     body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',

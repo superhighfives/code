@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { mdxParse } from "safe-mdx/parse";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
 import { components } from "~/components/utils/components";
 import tags from "~/components/utils/tags";
+import { customMdxParse } from "~/mdx/custom-mdx-parser";
 import { useMdxAttributes, useMdxComponent } from "~/mdx/mdx-hooks";
 import type { PostLoaderData } from "~/mdx/types";
 import { processArticleDate } from "~/utils/posts";
@@ -18,7 +18,7 @@ export async function loader({
   const rawContent = content as string;
 
   // Pre-process code blocks
-  const ast = mdxParse(rawContent);
+  const ast = customMdxParse(rawContent);
   const highlightedBlocks: Record<string, string> = {};
 
   // Find all code blocks and highlight them (skip live blocks)

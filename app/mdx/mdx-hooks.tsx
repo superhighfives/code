@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useRef } from "react";
 import { useLoaderData } from "react-router";
 import { type MyRootContent, SafeMdxRenderer } from "safe-mdx";
-import { mdxParse } from "safe-mdx/parse";
+import Command from "~/components/command";
 import LiveCodeBlock from "~/components/live-code-block";
 import { Code } from "~/components/static-code-block";
+import { customMdxParse } from "./custom-mdx-parser";
 import type { MDXComponents, MdxAttributes, PostLoaderData } from "./types";
 
 function parseMetaString(
@@ -47,6 +48,15 @@ export function useMdxComponent(components?: MDXComponents) {
         blockIndexRef.current++;
         const highlightedHtml =
           highlightedBlocks?.[key] || `<pre><code>${node.value}</code></pre>`;
+
+        if (meta.command) {
+          return (
+            <div className="not-prose command">
+              <Command highlightedHtml={highlightedHtml} />
+            </div>
+          );
+        }
+
         return (
           <div className="not-prose code">
             <Code highlightedHtml={highlightedHtml} />
@@ -62,7 +72,7 @@ export function useMdxComponent(components?: MDXComponents) {
       // Reset blockIndex for each render
       blockIndexRef.current = 0;
 
-      const ast = mdxParse(__raw);
+      const ast = customMdxParse(__raw);
 
       return (
         <SafeMdxRenderer
