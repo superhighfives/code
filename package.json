@@ -8,7 +8,6 @@
     "@conform-to/zod": "^1.11.0",
     "@epic-web/client-hints": "^1.3.8",
     "@epic-web/invariant": "^1.0.0",
-    "@paper-design/shaders-react": "^0.0.55",
     "@resvg/resvg-wasm": "^2.6.2",
     "@tailwindcss/typography": "^0.5.19",
     "cookie": "^1.0.2",

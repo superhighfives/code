@@ -7,6 +7,7 @@ import {
   useSandpack,
 } from "@codesandbox/sandpack-react";
 import { useEffect, useState } from "react";
+import { ClientOnly } from "remix-utils/client-only";
 import { useTheme } from "~/routes/resources/theme-switch";
 import { sandpackLatte, sandpackMocha } from "./themes";
 
@@ -38,21 +39,37 @@ h1 {
 font-size: 1.5rem;
 }`;
 
-function extractDependencies(code: string): Record<string, string> {
-  const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
+function extractDependencies(code: string): {
+  dependencies: Record<string, string>;
+  cleanedCode: string;
+} {
+  // Match import statements with optional version comment
+  // Example: import { MeshGradient } from '@paper-design/shaders-react' // ^0.0.55
+  // This will capture the package name and version (if any), or fall back to latest
+  const importRegex =
+    /import\s+.*?\s+from\s+['"]([^'"]+)['"](?:\s*\/\/\s*(.+))?/g;
   const dependencies: Record<string, string> = {};
+  let cleanedCode = code;
   let match = importRegex.exec(code);
 
   while (match !== null) {
     const packageName = match[1];
+    const version = match[2]?.trim();
     // Only include external packages (not relative imports)
     if (!packageName.startsWith(".") && !packageName.startsWith("/")) {
-      dependencies[packageName] = "latest";
+      dependencies[packageName] = version || "latest";
+      // Remove version comment from the code if it exists
+      if (version) {
+        cleanedCode = cleanedCode.replace(
+          match[0],
+          match[0].replace(/\s*\/\/\s*.+$/, ""),
+        );
+      }
     }
     match = importRegex.exec(code);
   }
 
-  return dependencies;
+  return { dependencies, cleanedCode };
 }
 
 function Sandpack({ onCodeChange }: { onCodeChange: (code: string) => void }) {
@@ -80,11 +97,11 @@ function Sandpack({ onCodeChange }: { onCodeChange: (code: string) => void }) {
 }
 
 export default function LiveCodeBlock({ code }: PreProps) {
-  const dependencies = extractDependencies(code);
+  const { dependencies, cleanedCode } = extractDependencies(code);
   const theme = useTheme();
 
   // Track the current code state across theme changes
-  const [currentCode, setCurrentCode] = useState(code);
+  const [currentCode, setCurrentCode] = useState(cleanedCode);
 
   return (
     <SandpackProvider
@@ -110,7 +127,7 @@ export default function LiveCodeBlock({ code }: PreProps) {
         dependencies,
       }}
     >
-      <style>{getSandpackCssText()}</style>
+      <ClientOnly>{() => <style>{getSandpackCssText()}</style>}</ClientOnly>
       <Sandpack onCodeChange={setCurrentCode} />
     </SandpackProvider>
   );

@@ -106,8 +106,32 @@ Take the following steps to improve the writing:
 
 ## Techincal specifications
 
+### Code snippets
+
 Always include the language of code snippets as their extension on the code fence, like so:
 
 ```jsx
 const puppies = "are great"
+```
+
+### Commands
+
+Commands users should run:
+
+```jsx command
+const puppies = "are great"
+```
+
+### Live snippets
+
+These can import any library, and should define the appropriate version as a comment. This will then get used by Sandpack to load the dependency. They must export a `export default function App()`, and return a ReactNode or similar. When using a library, be sure to check NPM for the appropriate version and add it as a comment.
+
+```jsx live
+import { dependency } from 'library' // ^0.0.1
+export default function App() {
+  // <-- code
+  return (
+    <div /> // <-- output
+  )
+}
 ```
