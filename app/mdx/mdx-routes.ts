@@ -9,7 +9,7 @@ import {
 export async function routesAsync(componentPath: string) {
   const manifest = await generateMdxManifest();
   return manifest.files.map((file) =>
-    route(file.urlPath, componentPath, {
+    route(file.url, componentPath, {
       id: file.slug,
     }),
   );
@@ -18,7 +18,7 @@ export async function routesAsync(componentPath: string) {
 export function routes(componentPath: string) {
   const manifest = generateMdxManifestSync();
   return manifest.files.map((file) =>
-    route(file.urlPath, componentPath, {
+    route(file.url, componentPath, {
       id: file.slug,
     }),
   );

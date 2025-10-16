@@ -8,7 +8,7 @@ vi.mock("~/mdx/mdx-runtime", () => ({
   loadAllMdxRuntime: vi.fn().mockResolvedValue([
     {
       slug: "test-post-1",
-      urlPath: "/test-post-1",
+      url: "/test-post-1",
       title: "First Test Post",
       description: "First description",
       date: new Date("2024-01-15"),
@@ -21,7 +21,7 @@ vi.mock("~/mdx/mdx-runtime", () => ({
     },
     {
       slug: "test-post-2",
-      urlPath: "/test-post-2",
+      url: "/test-post-2",
       title: "Second Test Post",
       description: "Second description",
       date: new Date("2024-02-20"),

@@ -57,7 +57,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${postsWithHtml
       .map(({ file, html }) => {
-        const postUrl = `${baseUrl}${file.urlPath}`;
+        const postUrl = `${baseUrl}${file.url}`;
         const date = new Date(file.attributes.date);
         const pubDate = date.toUTCString();
 

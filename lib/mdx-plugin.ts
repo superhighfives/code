@@ -90,16 +90,13 @@ export const mdxRoutes = [];`;
         }
 
         const routes = manifest.files.map((file) => ({
-          urlPath: file.urlPath,
-          id: file.urlPath.replace("/", ""),
+          url: file.url,
+          id: file.url.replace("/", ""),
         }));
 
         return `import { route } from "@react-router/dev/routes";
 export const mdxRoutes = [${routes
-          .map(
-            (r) =>
-              `route("${r.urlPath}", "routes/post.tsx", { id: "${r.id}" })`,
-          )
+          .map((r) => `route("${r.url}", "routes/post.tsx", { id: "${r.id}" })`)
           .join(",\n  ")}];`;
       }
     },
