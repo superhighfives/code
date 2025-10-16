@@ -27,7 +27,7 @@ export default function LinkBlock({
               {title}
             </span>
             {caption ? (
-              <span className="shrink-0 text-gray-400 dark:text-gray-500 text-xs font-sans">
+              <span className="shrink-0 text-gray-400 dark:text-gray-500 text-xs font-sans border px-2 rounded-full border-gray-200 dark:border-gray-700">
                 {caption}
               </span>
             ) : null}
