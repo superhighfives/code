@@ -1,4 +1,9 @@
 /* biome-ignore-file: Tailwind v4 @theme tokens unsupported by current Biome */
+
+/*************************************************************/
+/* Tailwind setup */
+/*************************************************************/
+
 @import "tailwindcss" source(".");
 
 @theme {
@@ -24,6 +29,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*************************************************************/
+/* Base styles */
+/*************************************************************/
+
 html {
   height: 100%;
 }
@@ -34,6 +43,10 @@ body {
   margin: 0 -1px;
 }
 
+/*************************************************************/
+/* Syntax highlighting */
+/*************************************************************/
+
 .shiki,
 .shiki span {
   color: var(--shiki-light) !important;
@@ -43,6 +56,10 @@ html.dark .shiki,
 html.dark .shiki span {
   color: var(--shiki-dark) !important;
 }
+
+/*************************************************************/
+/* Markdown alerts */
+/*************************************************************/
 
 :root {
   --github-alert-default-color: rgb(208, 215, 222);
@@ -132,15 +149,26 @@ html.dark .shiki span {
   color: var(--github-alert-caution-color);
 }
 
+/*************************************************************/
+/* Post styles */
+/*************************************************************/
+
 .post {
   @apply prose [&>*:not(.code)]:max-w-[60ch] prose-headings:text-sm prose-sm dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-300 prose-a:underline prose-a:hover:underline prose-a:decoration-indigo-200 dark:prose-a:decoration-indigo-900 prose-a:hover:decoration-current prose-a:underline-offset-4 py-3 sm:px-4 border border-transparent max-w-none prose-h1:before:content-['#'] prose-h2:before:content-['##'] prose-h3:before:content-['###'] prose-h4:before:content-['####'] prose-h5:before:content-['#####'] prose-h6:before:content-['######'] prose-headings:before:mr-2 prose-headings:before:tracking-widest prose-headings:before:text-indigo-400 prose-h1:border-b-2 prose-h2:border-b prose-h1:border-indigo-500 prose-h2:border-indigo-500 prose-h2:pb-4 prose-h2:mb-4 prose-h1:mt-16 prose-h2:mt-12 prose-h3:mt-8 prose-h4:mt-4 prose-h5:mt-2 prose-h6:mt-2 prose-a:text-wrap prose-a:break-words prose-a:[word-break:break-word] [&>:first-child]:mt-0 [&>:last-child]:mb-0 text-pretty;
 }
+
+/*************************************************************/
+/* Code styles */
+/*************************************************************/
 
 .code {
 	@apply overflow-x-scroll max-w-[calc(100vw)] -mx-8 sm:-mx-12 border-y border-gray-200 dark:border-gray-700 dark:bg-gray-900 bg-gray-50 text-gray-400 px-8 sm:px-12;
 }
 
-  /* Sandpack */
+/*************************************************************/
+/* Sandpack */
+/*************************************************************/
+
 .code .custom-wrapper {
   @apply subpixel-antialiased -mx-8 sm:-mx-12;
 }
