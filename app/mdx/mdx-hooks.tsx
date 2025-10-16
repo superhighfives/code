@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef } from "react";
 import { useLoaderData } from "react-router";
 import { type MyRootContent, SafeMdxRenderer } from "safe-mdx";
-import { mdxParse } from "safe-mdx/parse";
 import LiveCodeBlock from "~/components/live-code-block";
 import { Code } from "~/components/static-code-block";
+import { customMdxParse } from "./custom-mdx-parse";
 import type { MDXComponents, MdxAttributes, PostLoaderData } from "./types";
 
 function parseMetaString(
@@ -62,7 +62,7 @@ export function useMdxComponent(components?: MDXComponents) {
       // Reset blockIndex for each render
       blockIndexRef.current = 0;
 
-      const ast = mdxParse(__raw);
+      const ast = customMdxParse(__raw);
 
       return (
         <SafeMdxRenderer

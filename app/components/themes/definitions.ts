@@ -93,7 +93,7 @@ export const mocha: ThemeDefinition = {
     definition: "#89B4FA",
     property: "#f9e2af",
     static: "#fab387",
-    string: "#a6e3a1",
+    string: "#95efb7",
   },
   font: {
     body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',

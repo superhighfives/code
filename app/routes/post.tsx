@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { mdxParse } from "safe-mdx/parse";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
 import { components } from "~/components/utils/components";
 import tags from "~/components/utils/tags";
+import { customMdxParse } from "~/mdx/custom-mdx-parse";
 import { useMdxAttributes, useMdxComponent } from "~/mdx/mdx-hooks";
 import type { PostLoaderData } from "~/mdx/types";
 import { processArticleDate } from "~/utils/posts";
@@ -18,7 +18,7 @@ export async function loader({
   const rawContent = content as string;
 
   // Pre-process code blocks
-  const ast = mdxParse(rawContent);
+  const ast = customMdxParse(rawContent);
   const highlightedBlocks: Record<string, string> = {};
 
   // Find all code blocks and highlight them (skip live blocks)
@@ -78,7 +78,7 @@ export default function Post() {
       </div>
       <Metadata data={metadata} />
       {isOldArticle ? (
-        <p className="rounded-md overflow-hidden border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 sm:px-4 py-3 max-w-[65ch]">
+        <p className="rounded-md overflow-hidden border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 px-4 py-3 max-w-[65ch]">
           This has not been updated in the last three months, so this
           information miiiiiight be out of date. Here be dragons, etc.
         </p>
