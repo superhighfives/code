@@ -15,6 +15,21 @@
     "directory": "./public/",
     "binding": "ASSETS"
   },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "KUDOS_DO",
+        "class_name": "KudosObject",
+        "script_name": "code"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["KudosObject"]
+    }
+  ],
   "routes": [
     {
       "pattern": "code.charliegleason.com",

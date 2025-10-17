@@ -1,4 +1,5 @@
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
+import { KudosButton } from "~/components/kudos-button";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
 import { components } from "~/components/utils/components";
@@ -6,6 +7,7 @@ import tags from "~/components/utils/tags";
 import { customMdxParse } from "~/mdx/custom-mdx-parser";
 import { useMdxAttributes, useMdxComponent } from "~/mdx/mdx-hooks";
 import type { PostLoaderData } from "~/mdx/types";
+import { getKudosCookie, getKudosCount } from "~/utils/kudos.server";
 import { processArticleDate } from "~/utils/posts";
 import { highlightCode } from "~/utils/shiki.server";
 import { loadMdxRuntime } from "../mdx/mdx-runtime";
@@ -13,6 +15,7 @@ import type { Route } from "./+types/post";
 
 export async function loader({
   request,
+  context,
 }: Route.LoaderArgs): Promise<PostLoaderData> {
   const { content, frontmatter } = await loadMdxRuntime(request);
   const rawContent = content as string;
@@ -38,10 +41,21 @@ export async function loader({
     }
   }
 
+  // Fetch kudos data for this post
+  const kudosTotal = frontmatter.slug
+    ? await getKudosCount(frontmatter.slug, request, context.cloudflare.env)
+    : 0;
+
+  const kudosYou = frontmatter.slug
+    ? getKudosCookie(request, frontmatter.slug)
+    : 0;
+
   return {
     __raw: rawContent,
     attributes: frontmatter,
     highlightedBlocks,
+    kudosTotal,
+    kudosYou,
   };
 }
 
@@ -57,8 +71,9 @@ export function shouldRevalidate() {
 }
 
 export default function Post() {
+  const loaderData = useLoaderData<typeof loader>();
   const Component = useMdxComponent(components);
-  const { title, data, links, date } = useMdxAttributes();
+  const { title, data, links, date, slug } = useMdxAttributes();
   const { metadata, isOldArticle } = processArticleDate(data, date);
 
   return (
@@ -86,6 +101,15 @@ export default function Post() {
       <div className="post">
         <Component />
       </div>
+      {slug && (
+        <div className="flex justify-start px-4">
+          <KudosButton
+            slug={slug}
+            initialTotal={loaderData.kudosTotal}
+            initialYou={loaderData.kudosYou}
+          />
+        </div>
+      )}
       <Metalinks links={links} />
     </div>
   );
