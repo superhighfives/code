@@ -40,7 +40,11 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   overscroll-behavior-x: none;
+}
 
+:root {
+  --code-branding-light: #4C4CDD;
+  --code-branding-dark: #03060E;
 }
 
 /*************************************************************/
