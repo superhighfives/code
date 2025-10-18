@@ -149,7 +149,7 @@ function App() {
         <div className="content-end">
           <Outlet />
         </div>
-        <div className="fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
+        <div className="z-50 fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
           <div className="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-4 sm:pb-12">
             <div className="flex gap-6">
               <Link to="/" className="flex gap-1 leading-tight select-none">
