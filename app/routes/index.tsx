@@ -27,12 +27,12 @@ export default function Index() {
   const { posts } = useLoaderData<typeof loader>();
 
   return (
-    <div className="grid sm:grid-cols-2 gap-8 max-w-[65ch] content-end h-full">
-      <h1 className="text-gray-400 dark:text-gray-500 col-span-full">
+    <div className="grid gap-4 sm:gap-8 max-w-[65ch] content-end h-full">
+      <h1 className="text-gray-400 dark:text-gray-500">
         ❯ cd ~/code.charliegleason.com
       </h1>
       <About />
-      <div className="text-gray-900 dark:text-gray-100 sm:col-span-2 bg-white dark:bg-gray-950 grid gap-4">
+      <div className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-950 grid gap-4">
         <div className="rounded-md overflow-hidden shadow-sm divide-y divide-gray-100 dark:divide-gray-900 border border-gray-200 dark:border-gray-800">
           {posts.length ? (
             posts.map((post) => {

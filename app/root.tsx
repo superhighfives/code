@@ -145,7 +145,7 @@ function App() {
 
   return (
     <UserFingerprintContext.Provider value={data.fingerprint}>
-      <div className="grid grid-rows-layout gap-8 min-h-dvh p-4 sm:p-8 pb-24 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
+      <div className="grid grid-rows-layout gap-8 min-h-dvh p-4 sm:p-8 [padding-bottom:calc(env(safe-area-inset-bottom)+4.5rem)] sm:[padding-bottom:calc(env(safe-area-inset-bottom)+8rem)] text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
         <div className="content-end">
           <Outlet />
         </div>
