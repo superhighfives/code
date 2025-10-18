@@ -25,7 +25,7 @@ export function KudosButton({
         disabled={disabled}
         aria-label="Give kudos"
         title={disabled ? "Limit reached" : "Give kudos"}
-        className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 border border-indigo-600/20 dark:border-indigo-400/30 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 hover:dark:text-indigo-300 hover:border-current transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`cursor-pointer inline-flex items-center gap-2 px-3 py-2 border border-indigo-600/20 dark:border-indigo-400/30 text-indigo-600 dark:text-indigo-400 transition-colors disabled:border-current/20 disabled:cursor-not-allowed ${disabled ? "" : "hover:text-indigo-500 hover:dark:text-indigo-300 hover:border-current"}`}
       >
         <span role="img" aria-hidden="true">
           👍
