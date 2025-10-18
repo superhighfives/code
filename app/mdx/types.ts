@@ -52,6 +52,8 @@ export interface PostLoaderData {
   __raw: string;
   attributes: PostFrontmatter;
   highlightedBlocks?: Record<string, string>;
+  kudosTotal?: number;
+  kudosYou?: number;
 }
 
 export type MdxAttributes = {
