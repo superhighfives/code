@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import EditOnGitHub from "~/components/edit-on-github";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
 import { components } from "~/components/utils/components";
@@ -58,7 +59,7 @@ export function shouldRevalidate() {
 
 export default function Post() {
   const Component = useMdxComponent(components);
-  const { title, data, links, date } = useMdxAttributes();
+  const { title, data, links, date, slug } = useMdxAttributes();
   const { metadata, isOldArticle } = processArticleDate(data, date);
 
   return (
@@ -77,6 +78,7 @@ export default function Post() {
         </h1>
       </div>
       <Metadata data={metadata} />
+
       {isOldArticle ? (
         <p className="rounded-md overflow-hidden border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 px-4 py-3 max-w-[65ch]">
           This has not been updated in the last three months, so this
@@ -87,6 +89,7 @@ export default function Post() {
         <Component />
       </div>
       <Metalinks links={links} />
+      {date && slug && <EditOnGitHub date={date} slug={slug} />}
     </div>
   );
 }
