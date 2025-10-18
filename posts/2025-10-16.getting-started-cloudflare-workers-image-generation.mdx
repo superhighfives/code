@@ -1,0 +1,164 @@
+---
+slug: getting-started-cloudflare-workers-image-generation
+title: Getting started with Cloudflare Workers for image generation
+description: A quick guide to building dynamic Open Graph images on the edge with Cloudflare Workers and workers-og.
+image: true
+links:
+  workers-og: https://github.com/kvnang/workers-og
+  Cloudflare Workers: https://developers.cloudflare.com/workers/
+  Wrangler: https://developers.cloudflare.com/workers/wrangler/
+---
+
+I've been working on generating dynamic social card images for this site, and Cloudflare Workers turned out to be perfect for the job. They run on the edge, they're fast, and they don't require spinning up a browser with Puppeteer just to render some text on a colored background.
+
+The [workers-og](https://github.com/kvnang/workers-og) package makes this surprisingly straightforward. It's inspired by Vercel's `@vercel/og` but designed specifically for Cloudflare Workers, handling WASM bundling differently so it actually works on Cloudflare's edge runtime.
+
+## What you'll need
+
+Before you start, make sure you have Node.js and npm installed. That's pretty much it.
+
+## Setting up Wrangler
+
+Wrangler is Cloudflare's command-line tool for working with Workers. Install it globally:
+
+```bash command
+npm install -g wrangler
+```
+
+Then authenticate with your Cloudflare account:
+
+```bash command
+wrangler login
+```
+
+This will open your browser and ask you to log in. Once you're done, you're ready to create a Worker.
+
+## Creating your Worker
+
+Create a new Worker project:
+
+```bash command
+wrangler init my-og-image-worker
+```
+
+This will walk you through a few setup questions.
+
+Choose `Hello World` > `Worker only` > `TypeScript`.
+
+Once that's done, navigate into your project and install workers-og:
+
+```bash command
+cd my-og-image-worker
+npm install workers-og
+```
+
+## Writing the Worker
+
+Open up your `src/index.ts` and replace the contents with this:
+
+```ts
+import { ImageResponse } from 'workers-og'
+
+export default {
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url)
+    const title = url.searchParams.get('title') || 'Hello World'
+
+    const html = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 630px; width: 1200px; font-family: sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <h1 style="font-size: 60px; font-weight: bold; margin: 0; color: white; padding: 40px; text-align: center;">
+          ${title}
+        </h1>
+      </div>
+    `
+
+    return new ImageResponse(html, {
+      width: 1200,
+      height: 630,
+    })
+  },
+}
+```
+
+That's it. The `ImageResponse` class takes your HTML and turns it into a PNG image. The dimensions (1200x630) are the standard size for Open Graph images, which is what shows up when you share a link on social media.
+
+## Testing locally
+
+Run the development server:
+
+```bash command
+wrangler dev
+```
+
+This will start a local server, usually at `http://localhost:8787`. Open that in your browser and you should see your generated image. Try adding `?title=Your Text Here` to the URL to see it change.
+
+The HTML you pass to `ImageResponse` gets parsed using Cloudflare's HTMLRewriter API, so you can use standard HTML and inline styles. It's not a full browser, so keep your styling simple - think flexbox and basic CSS properties.
+
+## Deploying
+
+When you're ready to deploy, it's just:
+
+```bash command
+wrangler deploy
+```
+
+Your Worker will be live on Cloudflare's edge network. You'll get a URL like `https://my-og-image-worker.YOUR_SUBDOMAIN.workers.dev` that you can use anywhere.
+
+## Making it more useful
+
+The real power comes from making these images dynamic. You can pull in data from query parameters, fetch content from your site, or even grab data from a database.
+
+Here's a slightly fancier example that uses multiple parameters:
+
+```ts
+import { ImageResponse } from 'workers-og'
+
+export default {
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url)
+    const title = url.searchParams.get('title') || 'Hello World'
+    const subtitle = url.searchParams.get('subtitle') || ''
+    const theme = url.searchParams.get('theme') || 'purple'
+
+    const gradients = {
+      purple: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      blue: 'linear-gradient(135deg, #0093E9 0%, #80D0C7 100%)',
+      orange: 'linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%)',
+    }
+
+    const html = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; font-family: sans-serif; background: ${gradients[theme] || gradients.purple}">
+        <h1 style="font-size: 60px; font-weight: bold; margin: 0; color: white; padding: 40px 80px 20px; text-align: center;">
+          ${title}
+        </h1>
+        ${subtitle ? `<p style="font-size: 30px; color: white; opacity: 0.9; margin: 0; padding: 0 80px;">${subtitle}</p>` : ''}
+      </div>
+    `
+
+    return new ImageResponse(html, {
+      width: 1200,
+      height: 630,
+    })
+  },
+}
+```
+
+Now you can customize the output with URLs like:
+- `?title=My Post&subtitle=A short description&theme=blue`
+- `?title=Another Post&theme=orange`
+
+## A few notes
+
+The workers-og library uses [Satori](https://github.com/vercel/satori) under the hood for rendering, which means it's converting your HTML and CSS into an image without needing a browser. This is what makes it fast enough to run on the edge.
+
+One thing to watch out for - not all CSS properties are supported. Stick to flexbox layouts, basic colors, and standard fonts. If you need custom fonts, you'll need to fetch them and pass them to the `ImageResponse` options, which I won't get into here but is covered in the workers-og documentation.
+
+Also, because this is running on every request, you might want to think about caching. Cloudflare Workers have built-in caching support, or you could generate images at build time and serve them statically if they don't need to be dynamic.
+
+## Why this is useful
+
+I use these for automatically generating social card images for blog posts. Instead of manually creating an image in Figma for every post, I can just point to a URL like `/og-image?title=Post Title` and get a consistent, on-brand image every time.
+
+It's also handy for user-generated content. If you're building something where users create pages or profiles, you can generate unique social cards for each one without storing thousands of image files.
+
+The whole thing runs on Cloudflare's edge network, so it's fast no matter where your visitors are, and you're only charged for the compute time when someone actually requests an image. Good times all round.
