@@ -1,7 +1,13 @@
 import { useFetcher } from "react-router";
 import { useUserFingerprint } from "~/root";
 
-export function useKudos(slug: string, initialTotal = 0, initialYou = 0) {
+export function useKudos({
+  initialTotal = 0,
+  initialYou = 0,
+}: {
+  initialTotal?: number;
+  initialYou?: number;
+}) {
   const fingerprint = useUserFingerprint();
   const fetcher = useFetcher<{
     result: { ok?: boolean; total?: number; you?: number; reason?: string };

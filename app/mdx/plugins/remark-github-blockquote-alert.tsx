@@ -94,6 +94,7 @@ export const remarkAlert: Plugin<[Option?], Root> = ({
               type: "text",
               value: ` ${title.replace(/^\//, "")}`,
             },
+            // biome-ignore lint/suspicious/noExplicitAny: markdown-alert-title is not typed
           ] as any,
         };
 
@@ -113,9 +114,11 @@ export const remarkAlert: Plugin<[Option?], Root> = ({
               value: "auto",
             },
           ],
+          // biome-ignore lint/suspicious/noExplicitAny: markdown-alert is not typed
           children: [titleParagraph, ...child] as any,
         };
 
+        // biome-ignore lint/suspicious/noExplicitAny: alertElement is not typed
         parent.children[index] = alertElement as any;
       }
     });

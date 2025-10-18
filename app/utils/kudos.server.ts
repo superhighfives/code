@@ -96,14 +96,11 @@ export async function getUserKudosData(
 
     // Check how many this fingerprint has used
     // We need to add a new endpoint to the DO for this
-    const userResponse = await stub.fetch(
-      new URL("/user-count", url.origin),
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fingerprint }),
-      },
-    );
+    const userResponse = await stub.fetch(new URL("/user-count", url.origin), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fingerprint }),
+    });
     const userData: { you?: number } = await userResponse.json();
 
     return {

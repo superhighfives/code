@@ -56,9 +56,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     ?.match(/client-id=([^;]+)/)?.[1];
 
   // Combine server fingerprint with client ID
-  const fullFingerprint = clientId
-    ? `${clientId}:${fingerprint}`
-    : fingerprint;
+  const fullFingerprint = clientId ? `${clientId}:${fingerprint}` : fingerprint;
 
   const headers = new Headers();
   if (setCookie) {
@@ -78,9 +76,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     fingerprint: fullFingerprint,
   };
 
-  return headers.has("Set-Cookie")
-    ? Response.json(data, { headers })
-    : data;
+  return headers.has("Set-Cookie") ? Response.json(data, { headers }) : data;
 }
 
 function Document({

@@ -11,11 +11,10 @@ export function KudosButton({
   initialTotal = 0,
   initialYou = 0,
 }: KudosButtonProps) {
-  const { fetcher, fingerprint, total, remaining, disabled } = useKudos(
-    slug,
+  const { fetcher, fingerprint, total, remaining, disabled } = useKudos({
     initialTotal,
     initialYou,
-  );
+  });
 
   return (
     <fetcher.Form method="POST" action="/kudos">
