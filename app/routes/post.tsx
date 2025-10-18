@@ -1,4 +1,5 @@
 import { Link, useLoaderData } from "react-router";
+import EditOnGitHub from "~/components/edit-on-github";
 import { KudosButton } from "~/components/kudos-button";
 import Metadata from "~/components/metadata";
 import Metalinks from "~/components/metalinks";
@@ -92,6 +93,7 @@ export default function Post() {
         </h1>
       </div>
       <Metadata data={metadata} />
+
       {isOldArticle ? (
         <p className="rounded-md overflow-hidden border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 px-4 py-3 max-w-[65ch]">
           This has not been updated in the last three months, so this
@@ -102,12 +104,13 @@ export default function Post() {
         <Component />
       </div>
       {slug && (
-        <div className="flex justify-start px-4">
+        <div className="flex justify-start px-4 items-center gap-4">
           <KudosButton
             slug={slug}
             initialTotal={loaderData.kudosTotal}
             initialYou={loaderData.kudosYou}
           />
+          {date && <EditOnGitHub date={date} slug={slug} />}
         </div>
       )}
       <Metalinks links={links} />
