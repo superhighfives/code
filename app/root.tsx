@@ -96,7 +96,10 @@ function Document({
         <ClientHintCheck nonce={nonce} />
         <ClientIdCheck nonce={nonce} />
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="viewport-fit=cover, width=device-width, initial-scale=1"
+        />
         <Meta />
         <Links />
         {sandpackCss && (
@@ -108,7 +111,7 @@ function Document({
           />
         )}
       </head>
-      <body className="font-mono text-sm bg-white dark:bg-gray-950">
+      <body>
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
@@ -142,25 +145,27 @@ function App() {
 
   return (
     <UserFingerprintContext.Provider value={data.fingerprint}>
-      <div className="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
+      <div className="grid grid-rows-layout gap-8 min-h-dvh p-4 sm:p-8 pb-24 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
         <div className="content-end">
           <Outlet />
         </div>
-        <div className="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-12 fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
-          <div className="flex gap-6">
-            <Link to="/" className="flex gap-1 leading-tight select-none">
-              <span>{"❯"}</span>
-              <span className="animate-blink step">█</span>
-            </Link>
-            <NavLink to="/" className={navLinkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/about" className={navLinkClass}>
-              About
-            </NavLink>
-          </div>
-          <div className="flex gap-6">
-            <ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
+        <div className="fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
+          <div className="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-4 sm:pb-12">
+            <div className="flex gap-6">
+              <Link to="/" className="flex gap-1 leading-tight select-none">
+                <span>{"❯"}</span>
+                <span className="animate-blink step">█</span>
+              </Link>
+              <NavLink to="/" className={navLinkClass}>
+                Home
+              </NavLink>
+              <NavLink to="/about" className={navLinkClass}>
+                About
+              </NavLink>
+            </div>
+            <div className="flex gap-6">
+              <ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
+            </div>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import { useTheme } from "~/routes/resources/theme-switch";
+import LiveEditorBadge from "./live-editor-badge";
 import { sandpackLatte, sandpackMocha } from "./themes";
 
 interface PreProps {
@@ -90,7 +91,9 @@ function Sandpack({ onCodeChange }: { onCodeChange: (code: string) => void }) {
         showOpenInCodeSandbox={false}
         showRefreshButton={false}
         showOpenNewtab={false}
-      />
+      >
+        <LiveEditorBadge />
+      </SandpackPreview>
       <SandpackCodeEditor />
     </SandpackLayout>
   );
@@ -118,8 +121,8 @@ export default function LiveCodeBlock({ code }: PreProps) {
           "sp-editor": "custom-editor",
           "sp-code-editor": "custom-code-editor",
           "sp-pre-placeholder": "custom-pre-placeholder",
+          "sp-preview-frame": "custom-preview-frame",
           "sp-preview": "custom-preview",
-          "sp-cm": "custom-cm",
         },
       }}
       template="react-ts"

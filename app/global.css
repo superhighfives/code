@@ -40,6 +40,8 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   overscroll-behavior-x: none;
+  background-color: var(--color-white);
+  @apply text-sm font-mono bg-white dark:bg-gray-950;
 }
 
 :root {
@@ -183,7 +185,7 @@ html.dark .shiki span {
 /*************************************************************/
 
 .code {
-	@apply overflow-x-scroll max-w-[calc(100vw)] -mx-8 sm:-mx-12 border-y border-gray-200 dark:border-gray-700 dark:bg-gray-900 bg-gray-50 text-gray-400 px-8 sm:px-12;
+	@apply overflow-x-scroll max-w-[calc(100vw)] -mx-4 sm:-mx-12 border-y border-gray-200 dark:border-gray-700 dark:bg-gray-900 bg-gray-50 text-gray-400 [&>*]:mx-8 sm:[&>*]:mx-12 [&>*]:inline-block;
 }
 
 /*************************************************************/
@@ -191,7 +193,7 @@ html.dark .shiki span {
 /*************************************************************/
 
 .code .custom-wrapper {
-  @apply subpixel-antialiased -mx-8 sm:-mx-12;
+  @apply subpixel-antialiased;
 }
 
 .code .custom-layout {
@@ -207,19 +209,24 @@ html.dark .shiki span {
 }
 
 .code .custom-pre-placeholder {
-  @apply not-md:px-8!;
-}
-
-.code .cm-scroller > * {
-  @apply not-md:px-12;
+  @apply not-md:px-3!;
 }
 
 .code .custom-preview {
   @apply md:max-w-[300px] shadow-md border-none border-r border-gray-200 dark:border-gray-700 bg-black;
 }
 
-.code .sp-preview-iframe {
+.code .custom-preview-iframe {
   @apply bg-gray-100 dark:bg-gray-900;
+}
+
+.code .cm-scroller > * {
+  @apply px-7 sm:px-11 md:px-4;
+}
+
+.code .cm-content,
+.code .cm-editor {
+  @apply text-sm! leading-6!;
 }
 
 /*************************************************************/

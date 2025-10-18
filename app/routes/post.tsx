@@ -104,7 +104,7 @@ export default function Post() {
         <Component />
       </div>
       {slug && (
-        <div className="flex justify-start px-4 items-center gap-4">
+        <div className="flex flex-wrap justify-start sm:px-4 items-center gap-4">
           <KudosButton
             slug={slug}
             initialTotal={loaderData.kudosTotal}

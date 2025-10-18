@@ -43,7 +43,7 @@ export const latte: ThemeDefinition = {
   ui: {
     surface1: "#f8f9fb",
     surface2: "#EBEDF0",
-    surface3: "#e4e7eb",
+    surface3: "#f7f7f7",
     base: "#4c4f69",
     disabled: "#9ca0b0",
     clickable: "#1e66f5",
