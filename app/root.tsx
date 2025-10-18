@@ -113,7 +113,7 @@ function App() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div className="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
+    <div className="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
       <div className="content-end">
         <Outlet />
       </div>
