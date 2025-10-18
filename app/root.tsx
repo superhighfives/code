@@ -1,4 +1,5 @@
 import { getSandpackCssText } from "@codesandbox/sandpack-react";
+import { createContext, useContext } from "react";
 import {
   Link,
   Links,
@@ -16,6 +17,8 @@ import { getTheme } from "~/utils/theme.server";
 import type { Route } from "./+types/root";
 import GeneralErrorBoundary from "./components/error-boundary";
 import { ClientHintCheck, getHints } from "./utils/client-hints";
+import { ClientIdCheck } from "./utils/fingerprint";
+import { getFingerprint } from "./utils/fingerprint.server";
 import { getDomainUrl } from "./utils/misc";
 import { useNonce } from "./utils/nonce-provider";
 
@@ -38,8 +41,29 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+const UserFingerprintContext = createContext<string>("");
+
+export function useUserFingerprint() {
+  return useContext(UserFingerprintContext);
+}
+
 export async function loader({ request }: Route.LoaderArgs) {
-  return {
+  const { fingerprint, setCookie } = await getFingerprint(request);
+
+  // Get client ID from cookie if it exists
+  const clientId = request.headers
+    .get("Cookie")
+    ?.match(/client-id=([^;]+)/)?.[1];
+
+  // Combine server fingerprint with client ID
+  const fullFingerprint = clientId ? `${clientId}:${fingerprint}` : fingerprint;
+
+  const headers = new Headers();
+  if (setCookie) {
+    headers.append("Set-Cookie", setCookie);
+  }
+
+  const data = {
     requestInfo: {
       hints: getHints(request),
       origin: getDomainUrl(request),
@@ -49,7 +73,10 @@ export async function loader({ request }: Route.LoaderArgs) {
       },
     },
     sandpackCss: getSandpackCssText(),
+    fingerprint: fullFingerprint,
   };
+
+  return headers.has("Set-Cookie") ? Response.json(data, { headers }) : data;
 }
 
 function Document({
@@ -67,6 +94,7 @@ function Document({
     <html lang="en" className={theme}>
       <head>
         <ClientHintCheck nonce={nonce} />
+        <ClientIdCheck nonce={nonce} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
@@ -113,28 +141,30 @@ function App() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div className="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
-      <div className="content-end">
-        <Outlet />
-      </div>
-      <div className="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-12 fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
-        <div className="flex gap-6">
-          <Link to="/" className="flex gap-1 leading-tight select-none">
-            <span>{"❯"}</span>
-            <span className="animate-blink step">█</span>
-          </Link>
-          <NavLink to="/" className={navLinkClass}>
-            Home
-          </NavLink>
-          <NavLink to="/about" className={navLinkClass}>
-            About
-          </NavLink>
+    <UserFingerprintContext.Provider value={data.fingerprint}>
+      <div className="grid grid-rows-layout gap-8 min-h-dvh p-8 pb-28 sm:pb-32 text-indigo-600 dark:text-indigo-400 overflow-x-hidden">
+        <div className="content-end">
+          <Outlet />
         </div>
-        <div className="flex gap-6">
-          <ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
+        <div className="flex justify-between border-t dark:border-gray-800 px-8 pt-4 pb-12 fixed inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 drop-shadow-2xl">
+          <div className="flex gap-6">
+            <Link to="/" className="flex gap-1 leading-tight select-none">
+              <span>{"❯"}</span>
+              <span className="animate-blink step">█</span>
+            </Link>
+            <NavLink to="/" className={navLinkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/about" className={navLinkClass}>
+              About
+            </NavLink>
+          </div>
+          <div className="flex gap-6">
+            <ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
+          </div>
         </div>
       </div>
-    </div>
+    </UserFingerprintContext.Provider>
   );
 }
 

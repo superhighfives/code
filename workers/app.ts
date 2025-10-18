@@ -1,4 +1,5 @@
 import { createRequestHandler } from "react-router";
+import { KudosObject } from "./kudos-object";
 
 declare module "react-router" {
   export interface AppLoadContext {
@@ -23,6 +24,8 @@ export default {
     });
   },
 } satisfies ExportedHandler<Env>;
+
+export { KudosObject };
 
 if (import.meta.hot) {
   import.meta.hot.accept();
